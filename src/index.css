@@ -14,7 +14,7 @@
   default: true;
    --color-base-100: #F9FAFB;  /* Background (light mode) */
   --color-base-200: #B45309;  /* Bronze badge (warm brown tone) */
-  --color-primary: #111827;   /* Primary text (almost black) */
+  --color-primary: #4f46e5;   /* Primary text (almost black) */
   --color-secondary: #6B7280; /* Secondary text (gray-500, subtle) */
   --color-accent: #6366F1;    /* Indigo-500 for buttons, highlights, links */
   --color-success: #FBBF24;   /* Amber-400 for gold badge */
