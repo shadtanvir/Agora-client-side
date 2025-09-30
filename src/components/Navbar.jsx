@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { Link, NavLink, useNavigate } from "react-router"; // small fix: react-router-dom
-import { FaSignInAlt, FaSignOutAlt, FaBell } from "react-icons/fa";
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { AuthContext } from "../Provider/AuthProvider";
 import logo from "../assets/logo.png";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { Bell } from "lucide-react";
+import useAnnouncementCount from "../hooks/UseAnnouncementCount";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") === "dark" ? "dark" : "light"
   );
-  const [announcementCount, setAnnouncementCount] = useState(0);
   const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
   const profileRef = useRef(null);
@@ -19,25 +22,8 @@ const Navbar = () => {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  // fetch announcement count (best-effort - adjust endpoint to your backend)
-  useEffect(() => {
-    let mounted = true;
-    async function fetchCount() {
-      try {
-        const res = await fetch("/api/announcements/count"); // backend should return { count: number }
-        if (!res.ok) throw new Error("Failed");
-        const data = await res.json();
-        if (mounted && typeof data.count === "number")
-          setAnnouncementCount(data.count);
-      } catch (err) {
-        // fallback: leave count as 0 (no console spam)
-      }
-    }
-    fetchCount();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  // fetch announcement count
+  const { data: announcementCount, isLoading } = useAnnouncementCount();
 
   // close profile menu when clicked outside
   useEffect(() => {
@@ -73,18 +59,15 @@ const Navbar = () => {
           title="Announcements"
           className="relative inline-flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 dark:hover:bg-gray-400"
         >
-          <FaBell className="text-2xl text-blue-500" />
-          {announcementCount > 0 && (
-            <span
-              className="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-semibold leading-none rounded-full"
-              style={{
-                backgroundColor: "var(--color-base-200)",
-                color: "white",
-              }}
-            >
-              {announcementCount > 99 ? "99+" : announcementCount}
-            </span>
-          )}
+          {/* Notification Icon with Count */}
+          <div className="relative">
+            <Bell className="w-6 h-6 text-[var(--color-accent)]" />
+            {announcementCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[var(--color-error)] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {announcementCount > 99 ? "99+" : announcementCount}
+              </span>
+            )}
+          </div>
         </Link>
       </li>
 
@@ -234,7 +217,11 @@ const Navbar = () => {
       {/* Mobile dropdown */}
       <div className="navbar-start">
         <div className="dropdown md:hidden">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden text-primary">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost lg:hidden text-primary"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
