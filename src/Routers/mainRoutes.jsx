@@ -10,6 +10,7 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import MyProfile from "../Pages/Dashboard/Myprofile";
 import AddPost from "../Pages/Dashboard/AddPost";
 import MyPosts from "../Pages/Dashboard/MyPosts";
+import Comments from "../Pages/Dashboard/Comments";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const mainRoutes = createBrowserRouter([
       {
         path: "/dashboard/profile",
         element: <MyProfile></MyProfile>,
+      },
+      {
+        path: "/dashboard/comments/:postId",
+        element: <Comments></Comments>,
       },
       {
         path: "/dashboard/my-posts",
