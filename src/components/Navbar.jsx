@@ -97,21 +97,21 @@ const Navbar = () => {
 
             {/* dropdown */}
             {profileOpen && (
-              <div className="absolute right-0 mt-20 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-md z-50 text-sm">
-                <div className="px-4 py-3 border-b dark:border-gray-700">
-                  <div className="font-semibold text-sm text-gray-800 dark:text-gray-100">
+              <div className="absolute right-0 mt-50 w-48 bg-base-300  shadow-lg rounded-md z-50 text-sm">
+                <div className="px-4 py-3 border-b ">
+                  <div className="font-semibold text-sm text-primary ">
                     {user.displayName || "User"}
                   </div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-secondary">
                     {user.email}
                   </div>
                 </div>
-                <ul className="py-1">
+                <ul className="py-1 text-primary">
                   <li>
                     <Link
-                      to="/dashboard"
+                      to="/dashboard/profile"
                       onClick={() => setProfileOpen(false)}
-                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block px-4 py-2 hover:bg-gray-100 "
                     >
                       Dashboard
                     </Link>
@@ -119,7 +119,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="w-full text-left block px-4 py-2 hover:bg-gray-100 "
                     >
                       <span className="inline-flex items-center gap-2">
                         <FaSignOutAlt /> Logout
@@ -197,7 +197,7 @@ const Navbar = () => {
         <>
           <li className="flex items-center">
             <NavLink
-              to="/dashboard"
+              to="/dashboard/profile"
               className={({ isActive }) =>
                 isActive
                   ? "rounded-none font-bold text-primary"

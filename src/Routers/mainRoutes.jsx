@@ -5,6 +5,11 @@ import Home from "../Pages/Home";
 import PostDetails from "../Pages/PostDetails";
 import AuthLayout from "../Layouts/AuthLayout";
 import JoinUs from "../Pages/JoinUS";
+import PrivateRoute from "./PrivateRoute";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import MyProfile from "../Pages/Dashboard/Myprofile";
+import AddPost from "../Pages/Dashboard/AddPost";
+import MyPosts from "../Pages/Dashboard/MyPosts";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -28,6 +33,28 @@ const mainRoutes = createBrowserRouter([
       {
         index: true,
         element: <JoinUs></JoinUs>,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "/dashboard/profile",
+        element: <MyProfile></MyProfile>,
+      },
+      {
+        path: "/dashboard/my-posts",
+        element: <MyPosts></MyPosts>,
+      },
+      {
+        path: "/dashboard/add-post",
+        element: <AddPost></AddPost>,
       },
     ],
   },
