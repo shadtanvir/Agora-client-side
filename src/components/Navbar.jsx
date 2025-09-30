@@ -75,7 +75,7 @@ const Navbar = () => {
       <li className="ml-4 mb-4 md:mb-0 flex items-center">
         {!user ? (
           <NavLink
-            to="/auth/login"
+            to="/auth"
             className="btn btn-sm btn-outline font-poppins text-lg text-primary"
           >
             Join Us
