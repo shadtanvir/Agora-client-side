@@ -16,6 +16,7 @@ import ManageUsers from "../Pages/Dashboard/ManageUsers";
 import MakeAnnouncement from "../Pages/Dashboard/MakeAnnouncement";
 import ReportedComments from "../Pages/Dashboard/ReportedComments";
 import AdminProfile from "../Pages/Dashboard/AdminProfile";
+import MembershipPage from "../Pages/MembershipPage";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -25,6 +26,14 @@ const mainRoutes = createBrowserRouter([
       {
         index: true,
         element: <Home></Home>,
+      },
+      {
+        path: "/membership",
+        element: (
+          <PrivateRoute>
+            <MembershipPage></MembershipPage>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/posts/:id",

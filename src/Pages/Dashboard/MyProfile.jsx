@@ -47,7 +47,7 @@ const MyProfile = () => {
             )}
             {userData.badge === "gold" && (
               <span className="inline-flex items-center  py-1">
-                <img src={gold_badge} alt="gold" className="w-15 h-15" />
+                <img src={gold_badge} alt="gold" className="w-12 h-17" />
               </span>
             )}
           </div>
