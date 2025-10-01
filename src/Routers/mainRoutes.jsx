@@ -88,6 +88,7 @@ const mainRoutes = createBrowserRouter([
         path: "/dashboard/reported-comments",
         element: <ReportedComments></ReportedComments>,
       },
+
       {
         path: "/dashboard/make-announcement",
         element: <MakeAnnouncement></MakeAnnouncement>,

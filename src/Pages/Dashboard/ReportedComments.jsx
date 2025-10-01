@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router";
 import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
+import Loading from "../../components/Loading";
 
 const ReportedComments = () => {
   const axiosSecure = UseAxiosSecure();
@@ -11,17 +12,16 @@ const ReportedComments = () => {
   const { data: reported = [], isLoading } = useQuery({
     queryKey: ["reportedComments"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/comments/reported");
+      const res = await axiosSecure.get("/reported/comments");
       return res.data;
     },
   });
 
-  // Mutations
   const deleteMutation = useMutation({
     mutationFn: (id) => axiosSecure.delete(`/comments/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries(["reportedComments"]);
-      Swal.fire("Deleted!", "Comment has been removed.", "success");
+      Swal.fire("Deleted!", "Comment removed.", "success");
     },
   });
 
@@ -37,20 +37,19 @@ const ReportedComments = () => {
     mutationFn: (userId) => axiosSecure.patch(`/users/ban/${userId}`),
     onSuccess: () => {
       queryClient.invalidateQueries(["reportedComments"]);
-      Swal.fire("Banned!", "User has been banned from the forum.", "error");
+      Swal.fire("Banned!", "User banned from the forum.", "error");
     },
   });
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading) return <Loading></Loading>;
 
   return (
     <div className="max-w-6xl mx-auto my-10 p-4">
       <h2 className="text-2xl font-bold text-primary mb-6">
-        🚨 Reported Comments
+        Reported Comments
       </h2>
-
       {reported.length === 0 ? (
-        <p className="text-gray-500 text-center">No reported comments 🎉</p>
+        <p className="text-gray-500 text-center">No reported comments 🚀</p>
       ) : (
         <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
           <table className="table w-full text-sm">
@@ -61,13 +60,13 @@ const ReportedComments = () => {
                 <th>Email</th>
                 <th>Comment</th>
                 <th>Feedback</th>
-                <th>Reported At</th>
+                <th>Reported On</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {reported.map((comment, idx) => (
-                <tr key={comment._id}>
+                <tr key={comment._id} className="bg-base-100">
                   <td>{idx + 1}</td>
                   <td>{comment.userName}</td>
                   <td>{comment.userEmail}</td>
@@ -76,7 +75,7 @@ const ReportedComments = () => {
                     {comment.feedback}
                   </td>
                   <td>{new Date(comment.createdAt).toLocaleString()}</td>
-                  <td className="flex gap-2">
+                  <td className="space-x-2">
                     <Link
                       to={`/posts/${comment.postId}`}
                       className="btn btn-xs btn-info"
