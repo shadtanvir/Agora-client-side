@@ -12,6 +12,8 @@ import AddPost from "../Pages/Dashboard/AddPost";
 import MyPosts from "../Pages/Dashboard/MyPosts";
 import Comments from "../Pages/Dashboard/Comments";
 import DashboardIndex from "../components/DashboardIndex";
+import ManageUsers from "../Pages/Dashboard/ManageUsers";
+import MakeAnnouncement from "../Pages/Dashboard/MakeAnnouncement";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const mainRoutes = createBrowserRouter([
       {
         path: "/dashboard/add-post",
         element: <AddPost></AddPost>,
+      },
+      {
+        path: "/dashboard/manage-users",
+        element: <ManageUsers></ManageUsers>,
+      },
+      {
+        path: "/dashboard/make-announcement",
+        element: <MakeAnnouncement></MakeAnnouncement>,
       },
     ],
   },
