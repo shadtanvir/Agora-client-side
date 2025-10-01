@@ -10,15 +10,16 @@ const axiosInstance = axios.create({
 
 const UseAxiosSecure = () => {
   const { user, logOut } = useContext(AuthContext);
-  // console.log(user);
+  console.log(user.email);
 
   useEffect(() => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
       async (config) => {
         if (user) {
           try {
-            // ✅ Always fetch a fresh token
-            const token = await getIdToken(user, true);
+            // Always fetch a fresh token
+            const token = await user.getIdToken(true);
+
             config.headers.authorization = `Bearer ${token}`;
           } catch (err) {
             console.error("Error getting fresh token:", err);

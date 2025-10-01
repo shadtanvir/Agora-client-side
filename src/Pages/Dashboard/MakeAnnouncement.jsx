@@ -47,7 +47,7 @@ const MakeAnnouncement = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto my-10 p-6 shadow-md rounded-lg bg-white">
+    <div className="max-w-2xl mx-auto my-10 p-6 shadow-md rounded-lg bg-base-300">
       <h2 className="text-xl font-bold mb-4 text-primary">Make Announcement</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
@@ -67,7 +67,7 @@ const MakeAnnouncement = () => {
         ></textarea>
         <button
           type="submit"
-          className="btn btn-primary w-full"
+          className="btn btn-primary text-base-300 w-full"
           disabled={mutation.isLoading}
         >
           {mutation.isLoading ? "Posting..." : "Post Announcement"}
