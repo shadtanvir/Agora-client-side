@@ -5,11 +5,14 @@ import { AuthContext } from "../Provider/AuthProvider";
 import logo from "../assets/logo.png";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import UseRole from "../hooks/UseRole";
 import { Bell } from "lucide-react";
 import useAnnouncementCount from "../hooks/UseAnnouncementCount";
+import Loading from "./Loading";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
+
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") === "dark" ? "dark" : "light"
   );
@@ -73,15 +76,16 @@ const Navbar = () => {
 
       {/* Avatar / Login */}
       <li className="ml-4 mb-4 md:mb-0 flex items-center">
-        {!user ? (
+        {!user && (
           <NavLink
             to="/auth"
             className="btn btn-sm btn-outline font-poppins text-lg text-primary"
           >
             Join Us
           </NavLink>
-        ) : (
-          // avatar with dropdown
+        )}
+        {/* avatar with dropdown */}
+        {user && (
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setProfileOpen((s) => !s)}
@@ -102,14 +106,12 @@ const Navbar = () => {
                   <div className="font-semibold text-sm text-primary ">
                     {user.displayName || "User"}
                   </div>
-                  <div className="text-xs text-secondary">
-                    {user.email}
-                  </div>
+                  <div className="text-xs text-secondary">{user.email}</div>
                 </div>
                 <ul className="py-1 text-primary">
                   <li>
                     <Link
-                      to="/dashboard/profile"
+                      to="/dashboard"
                       onClick={() => setProfileOpen(false)}
                       className="block px-4 py-2 hover:bg-gray-100 "
                     >
@@ -197,7 +199,7 @@ const Navbar = () => {
         <>
           <li className="flex items-center">
             <NavLink
-              to="/dashboard/profile"
+              to="/dashboard"
               className={({ isActive }) =>
                 isActive
                   ? "rounded-none font-bold text-primary"
@@ -209,6 +211,7 @@ const Navbar = () => {
           </li>
         </>
       )}
+      
     </>
   );
 
@@ -248,8 +251,10 @@ const Navbar = () => {
         <div className="flex-1 ">
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
-              <img src={logo} alt="Logo" className="w-25 h-25 object-contain" />
-              <span className="text-blue-600 text-3xl font-bold ">Agora</span>
+              <img src={logo} alt="Logo" className="w-20 h-20 object-contain" />
+              <span className="text-blue-600 text-3xl -ml-2 font-bold ">
+                Agora
+              </span>
             </Link>
           </div>
         </div>

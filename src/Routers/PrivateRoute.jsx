@@ -14,7 +14,7 @@ const PrivateRoute = ({ children }) => {
     return children;
   }
   return (
-    <Navigate to="/auth/login" state={{ from: location.pathname }} replace />
+    <Navigate to="/auth" state={{ from: location.pathname }} replace />
   );
 };
 

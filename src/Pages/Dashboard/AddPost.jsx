@@ -87,7 +87,7 @@ const AddPost = () => {
             </option>
           ))}
         </select>
-        <button type="submit" className="btn btn-primary w-full">
+        <button type="submit" className="btn btn-primary text-base-100 w-full">
           Share Post
         </button>
       </form>

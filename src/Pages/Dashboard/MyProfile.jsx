@@ -3,6 +3,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import axios from "axios";
 import bronze_badge from "../../assets/bronze_badge.png";
 import gold_badge from "../../assets/gold_badge.png";
+import Loading from "../../components/Loading";
 
 const MyProfile = () => {
   const { user } = useContext(AuthContext);
@@ -17,11 +18,10 @@ const MyProfile = () => {
   }, [user]);
 
   if (!profile) {
-    return <p>Loading profile...</p>;
+    return <Loading></Loading>;
   }
 
   const { user: userData, recentPosts } = profile;
-  console.log(userData);
 
   return (
     <div>
@@ -56,7 +56,9 @@ const MyProfile = () => {
 
       {/* Recent Posts */}
       <div className="mt-8">
-        <h3 className="text-3xl text-primary font-semibold mb-4">My Recent Posts</h3>
+        <h3 className="text-3xl text-primary font-semibold mb-4">
+          My Recent Posts
+        </h3>
         {recentPosts.length === 0 ? (
           <p className="text-gray-500">No posts yet</p>
         ) : (

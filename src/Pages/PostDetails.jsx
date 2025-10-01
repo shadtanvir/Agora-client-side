@@ -17,12 +17,28 @@ const PostDetails = () => {
   const { user } = use(AuthContext);
   const { id } = useParams();
   const [post, setPost] = useState(null);
+  const [dbUser, setDbUser] = useState(null);
+
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const axiosSecure = UseAxiosSecure();
 
   const shareUrl = `${window.location.origin}/post/${id}`;
 
+  // fetch user from DB
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/users/${user.email}`
+        );
+        const { user: dbUser } = res.data;
+        setDbUser(dbUser); // store it in state
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [user]);
   // fetch post details
   useEffect(() => {
     (async () => {
@@ -54,8 +70,8 @@ const PostDetails = () => {
       const res = await axiosSecure.post(
         `/posts/${id}/comments?email=${user.email}`,
         {
-          userId: "123", // replace with logged in user id
-          userName: "Test User", // replace with logged in user name
+          userId: dbUser._id, // replace with logged in user id
+          userName: dbUser.name, // replace with logged in user name
           text: comment,
         }
       );

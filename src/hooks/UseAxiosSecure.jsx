@@ -1,38 +1,55 @@
 import axios from "axios";
-import React, { use } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { getIdToken } from "firebase/auth";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5000",
 });
+
 const UseAxiosSecure = () => {
-  const { user, logOut } = use(AuthContext);
-  axiosInstance.interceptors.request.use((config) => {
-    config.headers.authorization = `Bearer ${user?.accessToken}`;
-    return config;
-  });
-  axiosInstance.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      if (error.status === 401) {
-        logOut()
-          .then(() => {
-            // alert("You are logged out!");
-          })
-          .catch((error) => {
-            // alert(error);
+  const { user, logOut } = useContext(AuthContext);
+  // console.log(user);
+
+  useEffect(() => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      async (config) => {
+        if (user) {
+          try {
+            // ✅ Always fetch a fresh token
+            const token = await getIdToken(user, true);
+            config.headers.authorization = `Bearer ${token}`;
+          } catch (err) {
+            console.error("Error getting fresh token:", err);
+          }
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response?.status === 401) {
+          logOut().then(() => {
+            toast.error("Unauthorized Access! You have been logged out.");
           });
-        toast.error("Unauthorized Access!");
+        }
+        if (error.response?.status === 403) {
+          toast.error("Forbidden Access!");
+        }
+        return Promise.reject(error);
       }
-      if (error.status === 403) {
-        toast.error("Forbidden Access!");
-      }
-    }
-  );
+    );
+
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [user, logOut]);
+
   return axiosInstance;
 };
 

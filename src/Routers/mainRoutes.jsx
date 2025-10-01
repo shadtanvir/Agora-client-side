@@ -11,6 +11,7 @@ import MyProfile from "../Pages/Dashboard/Myprofile";
 import AddPost from "../Pages/Dashboard/AddPost";
 import MyPosts from "../Pages/Dashboard/MyPosts";
 import Comments from "../Pages/Dashboard/Comments";
+import DashboardIndex from "../components/DashboardIndex";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -46,7 +47,15 @@ const mainRoutes = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard/profile",
+        index: true,
+        element: <DashboardIndex></DashboardIndex>,
+      },
+      {
+        path: "/dashboard/admin-profile",
+        element: <h2>Admin profile</h2>,
+      },
+      {
+        path: "/dashboard/user-profile",
         element: <MyProfile></MyProfile>,
       },
       {
