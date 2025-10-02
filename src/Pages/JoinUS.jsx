@@ -74,7 +74,7 @@ const JoinUs = () => {
               badge: "bronze",
               role: "user",
             });
-           
+
             axios.post("http://localhost:5000/register", {
               email: data.email,
               name: data.name,

@@ -4,8 +4,10 @@ import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Loading from "../../components/Loading";
 import Swal from "sweetalert2";
+import useTitle from "../../hooks/UseTitle";
 
 const ManageUsers = () => {
+  useTitle("Manage Users");
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();
   const { user } = use(AuthContext);

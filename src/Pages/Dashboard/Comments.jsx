@@ -6,6 +6,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
+import useTitle from "../../hooks/UseTitle";
 
 const feedbackOptions = [
   "Spam or Irrelevant",
@@ -14,13 +15,14 @@ const feedbackOptions = [
 ];
 
 const Comments = () => {
+  useTitle("Post Comments");
   const { postId } = useParams();
   const { user } = use(AuthContext);
   const axiosSecure = UseAxiosSecure();
 
   const [selectedComment, setSelectedComment] = useState(null);
   const [page, setPage] = useState(1);
-  const [feedbacks, setFeedbacks] = useState({}); 
+  const [feedbacks, setFeedbacks] = useState({});
 
   const limit = 5;
 

@@ -5,8 +5,10 @@ import bronze_badge from "../../assets/bronze_badge.png";
 import gold_badge from "../../assets/gold_badge.png";
 import Loading from "../../components/Loading";
 import { useQuery } from "@tanstack/react-query";
+import useTitle from "../../hooks/UseTitle";
 
 const MyProfile = () => {
+  useTitle("Profile");
   const { user } = useContext(AuthContext);
 
   // Use TanStack Query to fetch user + recentPosts
@@ -96,10 +98,10 @@ const MyProfile = () => {
                 key={post._id}
                 className="p-4 border-primary rounded-lg shadow-sm"
               >
-                <h4 className="font-semibold text-primary text-lg">{post.title}</h4>
-                <p className=" text-sm line-clamp-2">
-                  {post.description}
-                </p>
+                <h4 className="font-semibold text-primary text-lg">
+                  {post.title}
+                </h4>
+                <p className=" text-sm line-clamp-2">{post.description}</p>
                 <div className="mt-2 text-xs text-secondary  flex justify-between">
                   <span>Tag: {post.tag}</span>
                   <span>

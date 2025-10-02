@@ -4,9 +4,11 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
+import useTitle from "../../hooks/UseTitle";
 
 const COLORS = ["#4CAF50", "#2196F3", "#FF9800"];
 const AdminProfile = () => {
+  useTitle("Admin Profile");
   const { user } = useContext(AuthContext);
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();

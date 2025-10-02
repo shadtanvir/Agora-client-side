@@ -4,8 +4,10 @@ import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import Loading from "../../components/Loading";
 import { useState } from "react";
+import useTitle from "../../hooks/UseTitle";
 
 const ReportedComments = () => {
+  useTitle("Reported Comments");
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();
   const [page, setPage] = useState(1);

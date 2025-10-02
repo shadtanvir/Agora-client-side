@@ -6,8 +6,10 @@ import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
+import useTitle from "../../hooks/UseTitle";
 
 const MyPosts = () => {
+  useTitle("My Posts");
   const { user, loading } = useContext(AuthContext);
   const [selectedPost, setSelectedPost] = useState(null);
   const [page, setPage] = useState(1);

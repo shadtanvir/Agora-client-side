@@ -4,8 +4,10 @@ import { AuthContext } from "../Provider/AuthProvider";
 import UseAxiosSecure from "../hooks/UseAxiosSecure";
 import Loading from "../components/Loading";
 import { useQuery } from "@tanstack/react-query";
+import useTitle from "../hooks/UseTitle";
 
 const MembershipPage = () => {
+  useTitle("Membership");
   const { user } = useContext(AuthContext);
   const axiosSecure = UseAxiosSecure();
 
@@ -19,7 +21,7 @@ const MembershipPage = () => {
       const res = await axiosSecure.get(`/get-user?email=${user.email}`);
       return res.data;
     },
-    enabled: !!user?.email, // only fetch when email exists
+    enabled: !!user?.email,
   });
 
   if (isLoading) return <Loading />;

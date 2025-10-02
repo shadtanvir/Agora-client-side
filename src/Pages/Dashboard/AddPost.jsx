@@ -7,8 +7,10 @@ import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
+import useTitle from "../../hooks/UseTitle";
 
 const AddPost = () => {
+  useTitle("Add Post");
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const axiosSecure = UseAxiosSecure();

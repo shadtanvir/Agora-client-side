@@ -4,8 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { use } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import useTitle from "../../hooks/UseTitle";
 
 const MakeAnnouncement = () => {
+  useTitle("Make Announcement");
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();
   const { user } = use(AuthContext);
