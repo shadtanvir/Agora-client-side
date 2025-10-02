@@ -3,13 +3,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Loading from "../../components/Loading";
+import Swal from "sweetalert2";
 
 const ManageUsers = () => {
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();
   const { user } = use(AuthContext);
 
-  // Two states: one for input box, one for active search
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
 
@@ -19,7 +19,7 @@ const ManageUsers = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["users", search], // re-fetch only when `search` changes
+    queryKey: ["users", search],
     queryFn: async () => {
       const res = await axiosSecure.get(`/users?search=${search}`);
       return res.data;
@@ -33,6 +33,18 @@ const ManageUsers = () => {
       await axiosSecure.patch(`/users/make-admin/${id}`);
     },
     onSuccess: () => {
+      Swal.fire("Done!", "User is Admin now", "success");
+      queryClient.invalidateQueries(["users"]);
+    },
+  });
+
+  // Mutation: Ban / Unban
+  const toggleBanMutation = useMutation({
+    mutationFn: async ({ id, banned }) => {
+      await axiosSecure.patch(`/users/${id}/ban`, { banned });
+    },
+    onSuccess: () => {
+      Swal.fire("Done!", "User is updated", "success");
       queryClient.invalidateQueries(["users"]);
     },
   });
@@ -41,10 +53,13 @@ const ManageUsers = () => {
     makeAdminMutation.mutate(id);
   };
 
-  // Submit handler for search form
+  const handleToggleBan = (id, banned) => {
+    toggleBanMutation.mutate({ id, banned: !banned });
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearch(searchInput); // update query with final input
+    setSearch(searchInput);
   };
 
   if (isLoading) return <Loading />;
@@ -76,7 +91,7 @@ const ManageUsers = () => {
       {/* Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
         <table className="table w-full text-sm">
-          <thead className="bg-blue-300 font-poppins text-green-800">
+          <thead className="bg-blue-300 font-poppins ">
             <tr className="text-primary font-semibold">
               <th>#</th>
               <th>User Name</th>
@@ -94,7 +109,7 @@ const ManageUsers = () => {
                 <td>{u.email}</td>
                 <td>{u.role || "user"}</td>
                 <td>{u.membership || "Free"}</td>
-                <td>
+                <td className="flex gap-2">
                   {u.role !== "admin" && (
                     <button
                       onClick={() => handleMakeAdmin(u._id)}
@@ -106,6 +121,22 @@ const ManageUsers = () => {
                         : "Make Admin"}
                     </button>
                   )}
+
+                  <button
+                    onClick={() => handleToggleBan(u._id, u.banned)}
+                    className={`btn btn-sm ${
+                      u.banned
+                        ? "btn-success text-white"
+                        : "btn-error text-white"
+                    }`}
+                    disabled={toggleBanMutation.isLoading}
+                  >
+                    {toggleBanMutation.isLoading
+                      ? "Processing..."
+                      : u.banned
+                      ? "Unban"
+                      : "Ban"}
+                  </button>
                 </td>
               </tr>
             ))}

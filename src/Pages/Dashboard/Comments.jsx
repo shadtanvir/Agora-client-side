@@ -71,7 +71,7 @@ const Comments = () => {
               return (
                 <tr key={comment._id} className="bg-base-100">
                   <td>{index + 1}</td>
-                  <td className="font-medium">{comment.email}</td>
+                  <td className="font-medium">{comment.userEmail}</td>
                   <td>
                     {truncated}
                     {comment.text.length > 20 && (

@@ -45,7 +45,7 @@ const ReportedComments = () => {
 
   return (
     <div className="max-w-6xl mx-auto my-10 p-4">
-      <h2 className="text-2xl font-bold text-primary mb-6">
+      <h2 className="text-3xl font-bold text-center text-primary mb-6">
         Reported Comments
       </h2>
       {reported.length === 0 ? (
@@ -53,7 +53,7 @@ const ReportedComments = () => {
       ) : (
         <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
           <table className="table w-full text-sm">
-            <thead className="bg-red-200 font-semibold text-red-700">
+            <thead className="bg-blue-300 font-poppins text-primary">
               <tr>
                 <th>#</th>
                 <th>User</th>
@@ -71,11 +71,9 @@ const ReportedComments = () => {
                   <td>{comment.userName}</td>
                   <td>{comment.userEmail}</td>
                   <td className="max-w-xs truncate">{comment.text}</td>
-                  <td className="text-red-600 font-medium">
-                    {comment.feedback}
-                  </td>
+                  <td className="text-error font-medium">{comment.feedback}</td>
                   <td>{new Date(comment.createdAt).toLocaleString()}</td>
-                  <td className="space-x-2">
+                  <td className="flex gap-1 items-center justify-center h-full w-full">
                     <Link
                       to={`/posts/${comment.postId}`}
                       className="btn btn-xs btn-info"
