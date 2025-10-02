@@ -47,7 +47,7 @@ const AddPost = () => {
     navigate("/dashboard/my-posts");
   };
 
-  if (postCount >= 5) {
+  if (postCount >= 5 && userDb?.badge === "bronze") {
     return (
       <div className="text-center mt-10">
         <h2 className="text-xl font-semibold text-red-500">
@@ -66,7 +66,7 @@ const AddPost = () => {
   if (userDb?.banned) {
     Swal.fire(
       "Account Banned",
-      "You have been banned from this forum.",
+      "You cannot share a post.",
       "error"
     );
   }

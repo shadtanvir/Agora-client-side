@@ -114,6 +114,10 @@ const PostDetails = () => {
   };
 
   const handleComment = async () => {
+      if (userDb?.banned) {
+      Swal.fire("Account Banned", "You cannot comment!", "error");
+      return;
+    }
     if (!comment.trim()) return;
     try {
       const res = await axiosSecure.post(
@@ -223,7 +227,7 @@ const PostDetails = () => {
           />
           <button
             onClick={handleComment}
-            disabled={userDb?.banned}
+            // disabled={userDb?.banned}
             className="px-4 py-2 bg-primary text-base-100 rounded"
           >
             {user ? "Comment" : "Login to comment"}

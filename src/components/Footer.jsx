@@ -45,22 +45,10 @@ const Footer = () => {
                 Membership
               </Link>
             </li>
+
             <li>
-              <Link to="/tags" className="hover:text-accent transition">
-                Tags
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/announcements"
-                className="hover:text-accent transition"
-              >
-                Announcements
-              </Link>
-            </li>
-            <li>
-              <Link to="/about" className="hover:text-accent transition">
-                About
+              <Link to="/dashboard" className="hover:text-accent transition">
+                Dashboard
               </Link>
             </li>
           </ul>
