@@ -1,9 +1,10 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Provider/AuthProvider";
-import axios from "axios";
+import { use } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const feedbackOptions = [
   "Spam or Irrelevant",
@@ -14,32 +15,54 @@ const feedbackOptions = [
 const Comments = () => {
   const { postId } = useParams();
   const { user } = use(AuthContext);
-  const [comments, setComments] = useState([]);
-  const [selectedComment, setSelectedComment] = useState(null); // For modal
   const axiosSecure = UseAxiosSecure();
+  const [selectedComment, setSelectedComment] = useState(null);
 
-  useEffect(() => {
-    axiosSecure.get(`/comments/${postId}`).then((res) => setComments(res.data));
-  }, [postId, axiosSecure, user]);
+  // Fetch comments with TanStack Query
+  const {
+    data: comments = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["comments", postId],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/comments/${postId}`);
+      return res.data || [];
+    },
+    enabled: !!postId,
+  });
 
   const handleReport = async (commentId, feedback) => {
     try {
       const res = await axiosSecure.patch(
         `/comments/report/${commentId}?email=${user.email}`,
-        {
-          feedback,
-        }
+        { feedback }
       );
       if (res.data.modifiedCount > 0) {
-        setComments((prev) =>
-          prev.map((c) => (c._id === commentId ? { ...c, reported: true } : c))
-        );
         toast.success("Comment reported successfully!");
+        refetch(); // refresh comments after reporting
       }
     } catch (err) {
       toast.error("Failed to report comment.");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="max-w-5xl mx-auto my-10 text-center">
+        <p>Loading comments...</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="max-w-5xl mx-auto my-10 text-center text-red-600">
+        <p>Failed to load comments. Try again later.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto my-10 p-4 font-inter">
@@ -88,13 +111,7 @@ const Comments = () => {
                       value={comment.feedback || ""}
                       onChange={(e) => {
                         const value = e.target.value;
-                        setComments((prev) =>
-                          prev.map((c) =>
-                            c._id === comment._id
-                              ? { ...c, feedback: value }
-                              : c
-                          )
-                        );
+                        comment.feedback = value; // local edit
                       }}
                       disabled={comment.reported}
                     >

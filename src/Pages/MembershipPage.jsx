@@ -1,38 +1,35 @@
-import { use, useEffect, useState } from "react";
+import { useContext } from "react";
 import StripeWrapper from "../components/StripeWrapper";
 import { AuthContext } from "../Provider/AuthProvider";
 import UseAxiosSecure from "../hooks/UseAxiosSecure";
 import Loading from "../components/Loading";
+import { useQuery } from "@tanstack/react-query";
 
 const MembershipPage = () => {
-  const { user } = use(AuthContext);
-  const [badge, setBadge] = useState("");
-  const [loading, setLoading] = useState(null);
+  const { user } = useContext(AuthContext);
   const axiosSecure = UseAxiosSecure();
-  useEffect(() => {
-    let isMounted = true;
-    const fetchUser = async () => {
-      try {
-        const res = await axiosSecure.get(`/get-user?email=${user.email}`);
-        if (isMounted) {
-          setBadge(res.data.badge);
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error("Error fetching role:", err);
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
 
-    fetchUser();
+  const {
+    data: userData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["user", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/get-user?email=${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email, // only fetch when email exists
+  });
 
-    return () => {
-      isMounted = false; // cleanup if component unmounts
-    };
-  }, [axiosSecure, user?.email]);
-  if (loading) return <Loading></Loading>;
+  if (isLoading) return <Loading />;
+  if (error) {
+    console.error("Error fetching user:", error);
+    return <div className="text-red-600 text-center">Failed to load user.</div>;
+  }
+
+  const badge = userData?.badge;
+
   if (badge === "gold") {
     return (
       <div className="max-w-lg mx-auto p-6 shadow rounded bg-white text-center">
@@ -46,6 +43,7 @@ const MembershipPage = () => {
       </div>
     );
   }
+
   return (
     <div className="max-w-lg mx-auto p-6 shadow rounded bg-white">
       <h2 className="text-xl font-bold mb-4">Membership Upgrade</h2>

@@ -49,7 +49,7 @@ const ReportedComments = () => {
         Reported Comments
       </h2>
       {reported.length === 0 ? (
-        <p className="text-gray-500 text-center">No reported comments 🚀</p>
+        <p className="text-gray-500 text-center">No reported comments </p>
       ) : (
         <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
           <table className="table w-full text-sm">

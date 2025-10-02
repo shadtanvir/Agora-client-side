@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import {
@@ -8,49 +8,53 @@ import {
   ThumbsDownIcon,
   MessageCircle,
 } from "lucide-react";
-import {
-  WhatsappShareButton,
-  WhatsappIcon,
-} from "react-share";
+import { WhatsappShareButton, WhatsappIcon } from "react-share";
 import { AuthContext } from "../Provider/AuthProvider";
 import UseAxiosSecure from "../hooks/UseAxiosSecure";
 import useTitle from "../hooks/UseTitle";
 import Loading from "../components/Loading";
 import Swal from "sweetalert2";
 import UseUser from "../hooks/UseUser";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const PostDetails = () => {
   useTitle("Post Details");
   const { user } = useContext(AuthContext);
   const { id } = useParams();
-  const [post, setPost] = useState(null);
   const { userDb } = UseUser();
 
-  // ✅ separate states
   const [commentText, setCommentText] = useState(""); // input
-  const [comments, setComments] = useState([]);       // list
-
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();
   const shareUrl = `${window.location.origin}/post/${id}`;
 
-  // fetch post + comments
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(`http://localhost:5000/posts/${id}`);
-        setPost(res.data);
+  // fetch post with react-query
+  const {
+    data: post,
+    isLoading: postLoading,
+    error: postError,
+  } = useQuery({
+    queryKey: ["post", id],
+    queryFn: async () => {
+      const res = await axios.get(`http://localhost:5000/posts/${id}`);
+      return res.data;
+    },
+  });
 
-        const response = await axios.get(`http://localhost:5000/comments/${id}`);
-        setComments(response.data);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [id]);
+  // fetch comments with react-query
+  const {
+    data: comments = [],
+    isLoading: commentsLoading,
+    error: commentsError,
+  } = useQuery({
+    queryKey: ["comments", id],
+    queryFn: async () => {
+      const res = await axios.get(`http://localhost:5000/comments/${id}`);
+      return res.data;
+    },
+  });
 
-  // ✅ Vote mutation with optimistic updates
+  //  Vote mutation with optimistic updates
   const voteMutation = useMutation({
     mutationFn: async ({ type }) => {
       const res = await axiosSecure.patch(
@@ -61,7 +65,7 @@ const PostDetails = () => {
     onMutate: async ({ type }) => {
       if (!post) return;
       await queryClient.cancelQueries(["post", id]);
-      const previous = { ...post };
+      const previous = queryClient.getQueryData(["post", id]);
 
       let newUp = post.upVote;
       let newDown = post.downVote;
@@ -87,11 +91,18 @@ const PostDetails = () => {
         newVotes.push({ email: user.email, type });
       }
 
-      setPost({ ...post, upVote: newUp, downVote: newDown, votes: newVotes });
+      queryClient.setQueryData(["post", id], {
+        ...post,
+        upVote: newUp,
+        downVote: newDown,
+        votes: newVotes,
+      });
       return { previous };
     },
     onError: (err, _, context) => {
-      if (context?.previous) setPost(context.previous);
+      if (context?.previous) {
+        queryClient.setQueryData(["post", id], context.previous);
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries(["post", id]);
@@ -121,14 +132,19 @@ const PostDetails = () => {
           text: commentText,
         }
       );
-      setComments((prev) => [res.data.comment, ...prev]);
+      queryClient.setQueryData(["comments", id], (old = []) => [
+        res.data.comment,
+        ...old,
+      ]);
       setCommentText("");
     } catch (err) {
       console.error(err);
     }
   };
 
-  if (!post) return <Loading />;
+  if (postLoading || commentsLoading) return <Loading />;
+  if (postError || commentsError)
+    return <div className="text-red-600 text-center">Failed to load post.</div>;
 
   const hasVoted = post.votes?.find((v) => v.email === user?.email);
   const userVoteType = hasVoted?.type;

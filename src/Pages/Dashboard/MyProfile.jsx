@@ -1,27 +1,55 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import axios from "axios";
 import bronze_badge from "../../assets/bronze_badge.png";
 import gold_badge from "../../assets/gold_badge.png";
 import Loading from "../../components/Loading";
+import { useQuery } from "@tanstack/react-query";
 
 const MyProfile = () => {
   const { user } = useContext(AuthContext);
-  const [profile, setProfile] = useState(null);
 
-  useEffect(() => {
-    if (user?.email) {
-      axios
-        .get(`http://localhost:5000/users/${user.email}`)
-        .then((res) => setProfile(res.data));
-    }
-  }, [user]);
+  // Use TanStack Query to fetch user + recentPosts
+  const {
+    data: profileData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["userProfile", user?.email],
+    queryFn: async () => {
+      const res = await axios.get(`http://localhost:5000/users/${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
 
-  if (!profile) {
-    return <Loading></Loading>;
+  if (isLoading) {
+    return <Loading />;
   }
 
-  const { user: userData, recentPosts } = profile;
+  if (isError) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-500">Failed to load profile.</p>
+        <p className="text-sm text-gray-500">{error?.message}</p>
+      </div>
+    );
+  }
+
+  // Keep same variable names as before for minimal change
+  const profile = profileData || {};
+  const { user: userData = null, recentPosts = [] } = profile;
+
+  if (!userData) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">No profile data available.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -46,8 +74,8 @@ const MyProfile = () => {
               </span>
             )}
             {userData.badge === "gold" && (
-              <span className="inline-flex items-center  py-1">
-                <img src={gold_badge} alt="gold" className="w-12 h-17" />
+              <span className="inline-flex items-center py-1">
+                <img src={gold_badge} alt="Gold" className="w-12 h-17" />
               </span>
             )}
           </div>
@@ -75,7 +103,9 @@ const MyProfile = () => {
                 <div className="mt-2 text-xs text-gray-500 flex justify-between">
                   <span>Tag: {post.tag}</span>
                   <span>
-                    {new Date(post.createdAt).toLocaleDateString("en-US")}
+                    {post.createdAt
+                      ? new Date(post.createdAt).toLocaleDateString("en-US")
+                      : ""}
                   </span>
                 </div>
               </div>

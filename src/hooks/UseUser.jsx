@@ -1,34 +1,27 @@
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 import UseAxiosSecure from "./UseAxiosSecure";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const UseUser = () => {
-  const [userDb, setUserDb] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const { user } = useContext(AuthContext);
   const axiosSecure = UseAxiosSecure();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (!user?.email) return;
-      try {
-        setLoading(true);
-        const res = await axiosSecure.get(`/get-user?email=${user.email}`);
-        setUserDb(res.data);
-      } catch (err) {
-        // console.error("Error fetching user from DB:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["userDb", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return null;
+      const res = await axiosSecure.get(`/get-user?email=${user.email}`);
+      return res.data;
+    },
+    enabled: !!user?.email, 
+  });
 
-    fetchUser();
-  }, [user?.email, axiosSecure]);
-
-  return { userDb, loading, error };
+  return { userDb: data, loading, error };
 };
 
 export default UseUser;
