@@ -74,7 +74,7 @@ const JoinUs = () => {
               badge: "bronze",
               role: "user",
             });
-            // console.log(user);
+           
             axios.post("http://localhost:5000/register", {
               email: data.email,
               name: data.name,
@@ -103,7 +103,6 @@ const JoinUs = () => {
   const handleGoogleLogin = () => {
     googleSignIn()
       .then((res) => {
-        console.log(res.user);
         axios.post("http://localhost:5000/register", {
           email: res.user.email,
           name: res.user.displayName,

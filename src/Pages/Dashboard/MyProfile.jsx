@@ -94,13 +94,13 @@ const MyProfile = () => {
             {recentPosts.map((post) => (
               <div
                 key={post._id}
-                className="p-4 bg-base-100 border rounded-lg shadow-sm"
+                className="p-4 border-primary rounded-lg shadow-sm"
               >
-                <h4 className="font-semibold text-lg">{post.title}</h4>
-                <p className="text-gray-600 text-sm line-clamp-2">
+                <h4 className="font-semibold text-primary text-lg">{post.title}</h4>
+                <p className=" text-sm line-clamp-2">
                   {post.description}
                 </p>
-                <div className="mt-2 text-xs text-gray-500 flex justify-between">
+                <div className="mt-2 text-xs text-secondary  flex justify-between">
                   <span>Tag: {post.tag}</span>
                   <span>
                     {post.createdAt

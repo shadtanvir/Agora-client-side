@@ -74,10 +74,10 @@ const AdminProfile = () => {
 
       {/* Stats + Chart */}
 
-      <div className="space-y-2 text-primary mt-5">
-        <p>Total number of Posts: {stats.posts}</p>
-        <p>Total number of Users: {stats.users}</p>
-        <p>Total number of Comments: {stats.comments}</p>
+      <div className="space-y-2 font-medium mt-5">
+        <p className="text-[#2196F3]">Comments: {stats.comments}</p>
+        <p className="text-[#4CAF50]">Posts: {stats.posts}</p>
+        <p className="text-[#FF9800]">Users: {stats.users}</p>
       </div>
 
       <div className="flex justify-center">

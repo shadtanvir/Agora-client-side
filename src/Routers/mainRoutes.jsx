@@ -17,11 +17,13 @@ import MakeAnnouncement from "../Pages/Dashboard/MakeAnnouncement";
 import ReportedComments from "../Pages/Dashboard/ReportedComments";
 import AdminProfile from "../Pages/Dashboard/AdminProfile";
 import MembershipPage from "../Pages/MembershipPage";
+import ErrorPage from "../Pages/ErrorPage";
 
 const mainRoutes = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout></MainLayout>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -44,6 +46,7 @@ const mainRoutes = createBrowserRouter([
   {
     path: "/auth",
     element: <AuthLayout></AuthLayout>,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,
@@ -58,6 +61,7 @@ const mainRoutes = createBrowserRouter([
         <DashboardLayout></DashboardLayout>
       </PrivateRoute>
     ),
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         index: true,

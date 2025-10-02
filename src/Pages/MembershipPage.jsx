@@ -24,7 +24,6 @@ const MembershipPage = () => {
 
   if (isLoading) return <Loading />;
   if (error) {
-    console.error("Error fetching user:", error);
     return <div className="text-red-600 text-center">Failed to load user.</div>;
   }
 
@@ -32,11 +31,11 @@ const MembershipPage = () => {
 
   if (badge === "gold") {
     return (
-      <div className="max-w-lg mx-auto p-6 shadow rounded bg-white text-center">
-        <h2 className="text-xl font-bold mb-4">
+      <div className="max-w-lg my-20 mx-auto p-6 shadow rounded bg-base-300 text-center">
+        <h2 className="text-xl font-bold text-primary mb-4">
           You’re Already a Gold Member!
         </h2>
-        <p className="text-green-600">
+        <p className="">
           Thanks for supporting our community. You already have unlimited
           posting rights.
         </p>
@@ -45,8 +44,10 @@ const MembershipPage = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto p-6 shadow rounded bg-white">
-      <h2 className="text-xl font-bold mb-4">Membership Upgrade</h2>
+    <div className="max-w-lg mx-auto my-20 p-6 shadow rounded bg-base-300">
+      <h2 className="text-xl text-primary font-bold mb-4">
+        Membership Upgrade
+      </h2>
       <p className="mb-4">
         Pay $5 to become a Gold Member and unlock unlimited posting!
       </p>

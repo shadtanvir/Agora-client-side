@@ -113,7 +113,7 @@ const Navbar = () => {
                     <Link
                       to="/dashboard"
                       onClick={() => setProfileOpen(false)}
-                      className="block px-4 py-2 hover:bg-gray-100 "
+                      className="block px-4 py-2  "
                     >
                       Dashboard
                     </Link>
@@ -121,7 +121,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left block px-4 py-2 hover:bg-gray-100 "
+                      className="w-full text-left block px-4 py-2  "
                     >
                       <span className="inline-flex items-center gap-2">
                         <FaSignOutAlt /> Logout

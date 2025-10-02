@@ -32,7 +32,6 @@ const CheckoutForm = ({ amount }) => {
           user: { name: user.displayName, email: user.email },
         })
         .then(({ data }) => {
-          console.log("Client secret:", data.clientSecret);
           setClientSecret(data.clientSecret);
         });
     }
@@ -54,8 +53,7 @@ const CheckoutForm = ({ amount }) => {
     );
 
     if (error) {
-      console.error(error.message);
-      alert(error.message);
+      Swal("Payment Failed!", "Stripe payment Failed!", "error");
     } else if (paymentIntent.status === "succeeded") {
       // upgrade badge
 

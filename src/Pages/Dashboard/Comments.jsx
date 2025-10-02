@@ -20,7 +20,7 @@ const Comments = () => {
 
   const [selectedComment, setSelectedComment] = useState(null);
   const [page, setPage] = useState(1);
-  const [feedbacks, setFeedbacks] = useState({}); // ✅ store feedback by commentId
+  const [feedbacks, setFeedbacks] = useState({}); 
 
   const limit = 5;
 

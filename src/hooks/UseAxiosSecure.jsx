@@ -16,11 +16,9 @@ const UseAxiosSecure = () => {
       async (config) => {
         if (user) {
           try {
-            const token = await getIdToken(user, true); 
+            const token = await getIdToken(user, true);
             config.headers.Authorization = `Bearer ${token}`;
-          } catch (err) {
-            console.error("Error getting fresh token:", err);
-          }
+          } catch (err) {}
         }
         return config;
       },

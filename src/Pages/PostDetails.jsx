@@ -264,8 +264,8 @@ const PostDetails = () => {
         <div className="space-y-3">
           {comments.map((c, idx) => (
             <div key={c._id || idx} className="border-b pb-2">
-              <p className="text-sm">
-                <span className="font-semibold">{c.userName}</span>: {c.text}
+              <p className="text-sm text-secondary">
+                <span className="font-semibold text-primary">{c.userName}</span>: {c.text}
               </p>
               <span className="text-xs text-gray-500">
                 {new Date(c.createdAt).toLocaleString()}

@@ -238,7 +238,7 @@ const Banner = () => {
         <div className="grid gap-4">
           {isLoading && <div className="text-center">Loading posts...</div>}
           {isError && (
-            <div className="text-center text-red-500">Error loading posts</div>
+            <div className="text-center ">Error loading posts</div>
           )}
           {!isLoading && results.length === 0 && (
             <div className="text-center py-8 text-secondary">

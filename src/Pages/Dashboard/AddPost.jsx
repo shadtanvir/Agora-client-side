@@ -85,7 +85,6 @@ const AddPost = () => {
       form.reset();
       navigate("/dashboard/my-posts");
     } catch (err) {
-      console.error("Failed to create post:", err);
       Swal.fire("Error", "Failed to share post. Try again.", "error");
     } finally {
       setSubmitting(false);
