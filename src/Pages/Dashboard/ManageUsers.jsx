@@ -13,19 +13,23 @@ const ManageUsers = () => {
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState("");
 
+  const [page, setPage] = useState(1);
+  const limit = 5; // users per page
+
   // Fetch users
-  const {
-    data: users = [],
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["users", search],
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["users", search, page],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/users?search=${search}`);
+      const res = await axiosSecure.get(
+        `/users?search=${search}&page=${page}&limit=${limit}`
+      );
       return res.data;
     },
     keepPreviousData: true,
   });
+
+  const users = data?.users || [];
+  const totalPages = data?.totalPages || 1;
 
   // Mutation: Make Admin
   const makeAdminMutation = useMutation({
@@ -60,6 +64,7 @@ const ManageUsers = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     setSearch(searchInput);
+    setPage(1); // reset to first page when searching
   };
 
   if (isLoading) return <Loading />;
@@ -104,7 +109,7 @@ const ManageUsers = () => {
           <tbody>
             {users.map((u, index) => (
               <tr key={u._id} className="bg-base-100">
-                <td>{index + 1}</td>
+                <td>{(page - 1) * limit + index + 1}</td>
                 <td className="font-medium">{u.name}</td>
                 <td>{u.email}</td>
                 <td>{u.role || "user"}</td>
@@ -147,6 +152,29 @@ const ManageUsers = () => {
           <div className="text-center py-6 text-gray-500">No users found.</div>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-4 gap-2">
+          <button
+            className="btn btn-sm"
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Prev
+          </button>
+          <span className="flex items-center">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="btn btn-sm"
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -103,38 +103,30 @@ const MyPosts = () => {
             You haven’t posted anything yet.
           </div>
         )}
-
-        {/* Pagination Footer */}
-        {totalPages > 1 && (
-          <div className="flex justify-center gap-2 py-4">
-            <button
-              className="btn btn-sm"
-              onClick={() => setPage((p) => Math.max(p - 1, 1))}
-              disabled={page === 1}
-            >
-              Prev
-            </button>
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i + 1)}
-                className={`btn btn-sm ${
-                  page === i + 1 ? "btn-primary" : "btn-outline"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-            <button
-              className="btn btn-sm"
-              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-              disabled={page === totalPages}
-            >
-              Next
-            </button>
-          </div>
-        )}
       </div>
+
+      {/* Pagination Footer */}
+      {totalPages > 1 && (
+        <div className="flex justify-center gap-2 py-4">
+          <button
+            className="btn btn-sm"
+            onClick={() => setPage((p) => Math.max(p - 1, 1))}
+            disabled={page === 1}
+          >
+            Prev
+          </button>
+          <span className="px-3 py-1">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="btn btn-sm"
+            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+            disabled={page === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {/* Confirm Delete Modal */}
       {selectedPost && (

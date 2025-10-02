@@ -17,8 +17,11 @@ const Comments = () => {
   const { postId } = useParams();
   const { user } = use(AuthContext);
   const axiosSecure = UseAxiosSecure();
+
   const [selectedComment, setSelectedComment] = useState(null);
   const [page, setPage] = useState(1);
+  const [feedbacks, setFeedbacks] = useState({}); // ✅ store feedback by commentId
+
   const limit = 5;
 
   // Fetch comments with TanStack Query
@@ -38,32 +41,37 @@ const Comments = () => {
   const total = data?.total || 0;
   const totalPages = Math.ceil(total / limit);
 
-  const handleReport = async (commentId, feedback) => {
+  // Handle feedback change
+  const handleFeedbackChange = (commentId, value) => {
+    setFeedbacks((prev) => ({ ...prev, [commentId]: value }));
+  };
+
+  // Handle report
+  const handleReport = async (commentId) => {
+    const feedback = feedbacks[commentId];
+    if (!feedback) return toast.error("Please select feedback first!");
+
     try {
       const res = await axiosSecure.patch(
         `/comments/report/${commentId}?email=${user.email}`,
         { feedback }
       );
       if (res.data.modifiedCount > 0) {
+        refetch();
         toast.success("Comment reported successfully!");
-        refetch(); // refresh comments after reporting
       }
     } catch (err) {
       toast.error("Failed to report comment.");
     }
   };
 
-  if (isLoading) {
-    return <Loading></Loading>;
-  }
-
-  if (isError) {
+  if (isLoading) return <Loading />;
+  if (isError)
     return (
       <div className="max-w-5xl mx-auto my-10 text-center text-red-600">
         <p>Failed to load comments. Try again later.</p>
       </div>
     );
-  }
 
   return (
     <div className="max-w-5xl mx-auto my-10 p-4 font-inter">
@@ -109,11 +117,10 @@ const Comments = () => {
                   <td>
                     <select
                       className="select select-sm select-bordered"
-                      value={comment.feedback || ""}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        comment.feedback = value; // local edit
-                      }}
+                      value={feedbacks[comment._id] || ""}
+                      onChange={(e) =>
+                        handleFeedbackChange(comment._id, e.target.value)
+                      }
                       disabled={comment.reported}
                     >
                       <option value="">Select Feedback</option>
@@ -127,10 +134,8 @@ const Comments = () => {
                   <td>
                     <button
                       className="btn btn-sm btn-error text-white"
-                      disabled={!comment.feedback || comment.reported}
-                      onClick={() =>
-                        handleReport(comment._id, comment.feedback)
-                      }
+                      disabled={!feedbacks[comment._id] || comment.reported}
+                      onClick={() => handleReport(comment._id)}
                     >
                       {comment.reported ? "Reported" : "Report"}
                     </button>
@@ -148,51 +153,24 @@ const Comments = () => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-4">
-          <p className="text-sm text-gray-600">
-            Showing {(page - 1) * limit + 1} - {Math.min(page * limit, total)}{" "}
-            of {total}
-          </p>
-          <div className="join">
-            <button
-              className="join-item btn btn-sm"
-              onClick={() => setPage((old) => Math.max(old - 1, 1))}
-              disabled={page === 1}
-            >
-              «
-            </button>
-            {[...Array(totalPages)].slice(0, 5).map((_, i) => (
-              <button
-                key={i}
-                className={`join-item btn btn-sm ${
-                  page === i + 1 ? "btn-active" : ""
-                }`}
-                onClick={() => setPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            ))}
-            {totalPages > 5 && (
-              <span className="join-item btn btn-sm">...</span>
-            )}
-            {totalPages > 5 && (
-              <button
-                className={`join-item btn btn-sm ${
-                  page === totalPages ? "btn-active" : ""
-                }`}
-                onClick={() => setPage(totalPages)}
-              >
-                {totalPages}
-              </button>
-            )}
-            <button
-              className="join-item btn btn-sm"
-              onClick={() => setPage((old) => Math.min(old + 1, totalPages))}
-              disabled={page === totalPages}
-            >
-              »
-            </button>
-          </div>
+        <div className="flex justify-center mt-4 space-x-2">
+          <button
+            className="btn btn-sm"
+            onClick={() => setPage((p) => Math.max(p - 1, 1))}
+            disabled={page === 1}
+          >
+            « Prev
+          </button>
+          <span className="px-3 py-1">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            className="btn btn-sm"
+            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+            disabled={page === totalPages}
+          >
+            Next »
+          </button>
         </div>
       )}
 
