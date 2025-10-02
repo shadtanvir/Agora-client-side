@@ -1,7 +1,13 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
-import { ThumbsUp, ThumbsDown, Share2, MessageCircle } from "lucide-react";
+import {
+  ThumbsUp,
+  ThumbsDown,
+  ThumbsUpIcon,
+  ThumbsDownIcon,
+  MessageCircle,
+} from "lucide-react";
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -11,34 +17,24 @@ import {
 import { AuthContext } from "../Provider/AuthProvider";
 import UseAxiosSecure from "../hooks/UseAxiosSecure";
 import useTitle from "../hooks/UseTitle";
+import Loading from "../components/Loading";
+import Swal from "sweetalert2";
+import UseUser from "../hooks/UseUser";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PostDetails = () => {
   useTitle("Post Details");
-  const { user } = use(AuthContext);
+  const { user } = React.useContext(AuthContext);
   const { id } = useParams();
   const [post, setPost] = useState(null);
-  const [dbUser, setDbUser] = useState(null);
-
+  const { userDb } = UseUser();
   const [comment, setComment] = useState("");
   const [loading, setLoading] = useState(false);
   const axiosSecure = UseAxiosSecure();
+  const queryClient = useQueryClient();
 
   const shareUrl = `${window.location.origin}/post/${id}`;
 
-  // fetch user from DB
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(
-          `http://localhost:5000/users/${user.email}`
-        );
-        const { user: dbUser } = res.data;
-        setDbUser(dbUser); // store it in state
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [user]);
   // fetch post details
   useEffect(() => {
     (async () => {
@@ -51,17 +47,70 @@ const PostDetails = () => {
     })();
   }, [id]);
 
-  const handleVote = async (type) => {
-    try {
-      await axiosSecure.patch(`/posts/${id}/${type}?email=${user.email}`);
-      setPost((prev) => ({
-        ...prev,
-        [type === "upvote" ? "upVote" : "downVote"]:
-          prev[type === "upvote" ? "upVote" : "downVote"] + 1,
-      }));
-    } catch (err) {
-      console.error(err);
+  // ✅ Vote mutation with optimistic updates
+  const voteMutation = useMutation({
+    mutationFn: async ({ type }) => {
+      const res = await axiosSecure.patch(
+        `/posts/${id}/vote?email=${user.email}&type=${type}`
+      );
+      return res.data;
+    },
+    onMutate: async ({ type }) => {
+      if (!post) return;
+
+      // cancel ongoing queries
+      await queryClient.cancelQueries(["post", id]);
+
+      // snapshot previous
+      const previous = { ...post };
+
+      let newUp = post.upVote;
+      let newDown = post.downVote;
+      let newVotes = [...(post.votes || [])];
+
+      const existing = newVotes.find((v) => v.email === user.email);
+
+      if (!existing) {
+        // first vote
+        type === "upvote" ? newUp++ : newDown++;
+        newVotes.push({ email: user.email, type });
+      } else if (existing.type === type) {
+        // remove same vote
+        type === "upvote" ? newUp-- : newDown--;
+        newVotes = newVotes.filter((v) => v.email !== user.email);
+      } else {
+        // switch vote
+        if (type === "upvote") {
+          newUp++;
+          newDown--;
+        } else {
+          newDown++;
+          newUp--;
+        }
+        newVotes = newVotes.filter((v) => v.email !== user.email);
+        newVotes.push({ email: user.email, type });
+      }
+
+      setPost({ ...post, upVote: newUp, downVote: newDown, votes: newVotes });
+
+      return { previous };
+    },
+    onError: (err, _, context) => {
+      if (context?.previous) {
+        setPost(context.previous);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["post", id]);
+    },
+  });
+
+  const handleVote = (type) => {
+    if (userDb?.banned) {
+      Swal.fire("Account Banned", "You cannot vote!", "error");
+      return;
     }
+    voteMutation.mutate({ type });
   };
 
   const handleComment = async () => {
@@ -70,8 +119,8 @@ const PostDetails = () => {
       const res = await axiosSecure.post(
         `/posts/${id}/comments?email=${user.email}`,
         {
-          userId: dbUser._id, // replace with logged in user id
-          userName: dbUser.name, // replace with logged in user name
+          userId: userDb._id,
+          userName: userDb.name,
           text: comment,
         }
       );
@@ -85,7 +134,10 @@ const PostDetails = () => {
     }
   };
 
-  if (!post) return <p className="text-center">Loading...</p>;
+  if (!post) return <Loading />;
+
+  const hasVoted = post.votes?.find((v) => v.email === user.email);
+  const userVoteType = hasVoted?.type;
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-6">
@@ -115,15 +167,36 @@ const PostDetails = () => {
         <div className="flex gap-4 items-center mt-5">
           <button
             onClick={() => handleVote("upvote")}
-            className="flex items-center gap-1 text-green-600"
+            disabled={voteMutation.isLoading}
+            className={`flex items-center gap-1 ${
+              userVoteType === "upvote"
+                ? "text-green-800 font-bold"
+                : "text-green-600"
+            }`}
           >
-            <ThumbsUp size={18} /> {post.upVote}
+            {userVoteType === "upvote" ? (
+              <ThumbsUpIcon size={20} fill="currentColor" />
+            ) : (
+              <ThumbsUp size={20} />
+            )}
+            {post.upVote}
           </button>
+
           <button
             onClick={() => handleVote("downvote")}
-            className="flex items-center gap-1 text-red-600"
+            disabled={voteMutation.isLoading}
+            className={`flex items-center gap-1 ${
+              userVoteType === "downvote"
+                ? "text-red-800 font-bold"
+                : "text-red-600"
+            }`}
           >
-            <ThumbsDown size={18} /> {post.downVote}
+            {userVoteType === "downvote" ? (
+              <ThumbsDownIcon size={20} fill="currentColor" />
+            ) : (
+              <ThumbsDown size={20} />
+            )}
+            {post.downVote}
           </button>
 
           {/* Share buttons */}
@@ -142,7 +215,6 @@ const PostDetails = () => {
           <MessageCircle size={20} /> Comments
         </h3>
 
-        {/* Input */}
         <div className="flex gap-2 mb-4">
           <input
             type="text"
@@ -153,7 +225,8 @@ const PostDetails = () => {
           />
           <button
             onClick={handleComment}
-            className="px-4 py-2 bg-indigo-600 text-white rounded"
+            disabled={userDb?.banned}
+            className="px-4 py-2 bg-primary text-base-100 rounded"
           >
             Comment
           </button>

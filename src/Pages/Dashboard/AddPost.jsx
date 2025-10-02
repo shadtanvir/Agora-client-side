@@ -2,12 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import UseUser from "../../hooks/UseUser";
+import Swal from "sweetalert2";
 
 const AddPost = () => {
   const { user } = useContext(AuthContext);
   const [postCount, setPostCount] = useState(0);
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const { userDb, loading, error } = UseUser();
+  console.log(userDb);
 
   useEffect(() => {
     if (user?.email) {
@@ -57,6 +61,13 @@ const AddPost = () => {
       </div>
     );
   }
+  if (userDb?.banned) {
+    Swal.fire(
+      "Account Banned",
+      "You have been banned from this forum.",
+      "error"
+    );
+  }
 
   return (
     <div className="max-w-3xl mx-auto mt-10">
@@ -87,7 +98,11 @@ const AddPost = () => {
             </option>
           ))}
         </select>
-        <button type="submit" className="btn btn-primary text-base-100 w-full">
+        <button
+          disabled={userDb?.banned}
+          type="submit"
+          className="btn btn-primary text-base-100 w-full"
+        >
           Share Post
         </button>
       </form>
