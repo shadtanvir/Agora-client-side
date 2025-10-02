@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import {
@@ -9,8 +9,6 @@ import {
   MessageCircle,
 } from "lucide-react";
 import {
-  FacebookShareButton,
-  FacebookIcon,
   WhatsappShareButton,
   WhatsappIcon,
 } from "react-share";
@@ -24,23 +22,28 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const PostDetails = () => {
   useTitle("Post Details");
-  const { user } = React.useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const { userDb } = UseUser();
-  const [comment, setComment] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  // ✅ separate states
+  const [commentText, setCommentText] = useState(""); // input
+  const [comments, setComments] = useState([]);       // list
+
   const axiosSecure = UseAxiosSecure();
   const queryClient = useQueryClient();
-
   const shareUrl = `${window.location.origin}/post/${id}`;
 
-  // fetch post details
+  // fetch post + comments
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(`http://localhost:5000/posts/${id}`);
         setPost(res.data);
+
+        const response = await axios.get(`http://localhost:5000/comments/${id}`);
+        setComments(response.data);
       } catch (err) {
         console.error(err);
       }
@@ -57,11 +60,7 @@ const PostDetails = () => {
     },
     onMutate: async ({ type }) => {
       if (!post) return;
-
-      // cancel ongoing queries
       await queryClient.cancelQueries(["post", id]);
-
-      // snapshot previous
       const previous = { ...post };
 
       let newUp = post.upVote;
@@ -71,15 +70,12 @@ const PostDetails = () => {
       const existing = newVotes.find((v) => v.email === user.email);
 
       if (!existing) {
-        // first vote
         type === "upvote" ? newUp++ : newDown++;
         newVotes.push({ email: user.email, type });
       } else if (existing.type === type) {
-        // remove same vote
         type === "upvote" ? newUp-- : newDown--;
         newVotes = newVotes.filter((v) => v.email !== user.email);
       } else {
-        // switch vote
         if (type === "upvote") {
           newUp++;
           newDown--;
@@ -92,13 +88,10 @@ const PostDetails = () => {
       }
 
       setPost({ ...post, upVote: newUp, downVote: newDown, votes: newVotes });
-
       return { previous };
     },
     onError: (err, _, context) => {
-      if (context?.previous) {
-        setPost(context.previous);
-      }
+      if (context?.previous) setPost(context.previous);
     },
     onSettled: () => {
       queryClient.invalidateQueries(["post", id]);
@@ -114,25 +107,22 @@ const PostDetails = () => {
   };
 
   const handleComment = async () => {
-      if (userDb?.banned) {
+    if (userDb?.banned) {
       Swal.fire("Account Banned", "You cannot comment!", "error");
       return;
     }
-    if (!comment.trim()) return;
+    if (!commentText.trim()) return;
     try {
       const res = await axiosSecure.post(
         `/posts/${id}/comments?email=${user.email}`,
         {
           userId: userDb._id,
           userName: userDb.name,
-          text: comment,
+          text: commentText,
         }
       );
-      setPost((prev) => ({
-        ...prev,
-        comments: [res.data.comment, ...(prev.comments || [])],
-      }));
-      setComment("");
+      setComments((prev) => [res.data.comment, ...prev]);
+      setCommentText("");
     } catch (err) {
       console.error(err);
     }
@@ -155,14 +145,14 @@ const PostDetails = () => {
           />
           <div>
             <h4 className="font-semibold">{post.authorName}</h4>
-            <span className="text-xs ">
+            <span className="text-xs">
               {new Date(post.createdAt).toLocaleString()}
             </span>
           </div>
         </div>
 
         <h2 className="text-2xl font-bold mb-3 text-primary">{post.title}</h2>
-        <p className="t mb-3">{post.description}</p>
+        <p className="mb-3">{post.description}</p>
         <span className="inline-block px-3 py-1 text-sm rounded-full bg-indigo-100 text-indigo-700">
           {post.tag}
         </span>
@@ -203,8 +193,6 @@ const PostDetails = () => {
             {post.downVote}
           </button>
 
-          {/* Share buttons */}
-
           <WhatsappShareButton url={shareUrl}>
             <WhatsappIcon size={28} round />
           </WhatsappShareButton>
@@ -220,14 +208,13 @@ const PostDetails = () => {
         <div className="flex gap-2 mb-4">
           <input
             type="text"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
             placeholder="Write a comment..."
             className="flex-1 border rounded px-3 py-2"
           />
           <button
             onClick={handleComment}
-            // disabled={userDb?.banned}
             className="px-4 py-2 bg-primary text-base-100 rounded"
           >
             {user ? "Comment" : "Login to comment"}
@@ -236,8 +223,8 @@ const PostDetails = () => {
 
         {/* List of comments */}
         <div className="space-y-3">
-          {(post.comments || []).map((c, idx) => (
-            <div key={idx} className="border-b pb-2">
+          {comments.map((c, idx) => (
+            <div key={c._id || idx} className="border-b pb-2">
               <p className="text-sm">
                 <span className="font-semibold">{c.userName}</span>: {c.text}
               </p>
@@ -246,7 +233,7 @@ const PostDetails = () => {
               </span>
             </div>
           ))}
-          {(!post.comments || post.comments.length === 0) && (
+          {comments.length === 0 && (
             <p className="text-gray-500 text-sm">No comments yet.</p>
           )}
         </div>

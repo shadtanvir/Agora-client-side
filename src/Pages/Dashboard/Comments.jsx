@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../Provider/AuthProvider";
+import axios from "axios";
 
 const feedbackOptions = [
   "Spam or Irrelevant",
@@ -18,9 +19,7 @@ const Comments = () => {
   const axiosSecure = UseAxiosSecure();
 
   useEffect(() => {
-    axiosSecure
-      .get(`/comments/${postId}?email=${user.email}`)
-      .then((res) => setComments(res.data));
+    axiosSecure.get(`/comments/${postId}`).then((res) => setComments(res.data));
   }, [postId, axiosSecure, user]);
 
   const handleReport = async (commentId, feedback) => {
