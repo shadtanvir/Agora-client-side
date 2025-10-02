@@ -5,28 +5,32 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/Loading";
 
 const MyPosts = () => {
   const { user, loading } = useContext(AuthContext);
   const [selectedPost, setSelectedPost] = useState(null);
+  const [page, setPage] = useState(1);
+  const limit = 5;
+
   const axiosSecure = UseAxiosSecure();
 
-  // ✅ Fetch posts with TanStack Query
-  const {
-    data: posts = [],
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["myPosts", user?.email],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["myPosts", user?.email, page],
     queryFn: async () => {
-      if (!user?.email) return [];
-      const res = await axiosSecure.get(`/posts/by-user?email=${user.email}`);
-      return res.data || [];
+      if (!user?.email) return { posts: [], total: 0 };
+      const res = await axiosSecure.get(
+        `/posts/by-user?email=${user.email}&page=${page}&limit=${limit}`
+      );
+      return res.data || { posts: [], total: 0 };
     },
     enabled: !loading && !!user?.email,
   });
 
-  // ✅ Delete handler
+  const posts = data?.posts || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / limit);
+
   const confirmDelete = async () => {
     if (!selectedPost) return;
     try {
@@ -36,7 +40,7 @@ const MyPosts = () => {
       if (res.data.deletedCount > 0) {
         toast.success("Post deleted successfully!");
         setSelectedPost(null);
-        refetch(); // refresh posts list
+        refetch();
       }
     } catch (err) {
       toast.error("Failed to delete post.");
@@ -44,11 +48,7 @@ const MyPosts = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="max-w-6xl mx-auto my-10 text-center">
-        <p>Loading posts...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -73,13 +73,15 @@ const MyPosts = () => {
           <tbody>
             {posts.map((post, index) => (
               <tr key={post._id} className="bg-base-100">
-                <td className="py-2 px-4">{index + 1}</td>
+                <td className="py-2 px-4">{(page - 1) * limit + index + 1}</td>
                 <td className="py-2 px-4 font-semibold text-primary">
                   {post.title}
                 </td>
                 <td className="py-2 px-4">{post.upVote - post.downVote}</td>
                 <td className="flex gap-2 py-2 px-4">
-                  <Link to={`/dashboard/comments/${post._id}?email=${user.email}`}>
+                  <Link
+                    to={`/dashboard/comments/${post._id}?email=${user.email}`}
+                  >
                     <button className="btn btn-sm btn-info flex items-center gap-1">
                       <FaCommentDots /> Comment
                     </button>
@@ -99,6 +101,37 @@ const MyPosts = () => {
         {!loading && posts.length === 0 && (
           <div className="text-center py-6 text-gray-500">
             You haven’t posted anything yet.
+          </div>
+        )}
+
+        {/* Pagination Footer */}
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-2 py-4">
+            <button
+              className="btn btn-sm"
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+            >
+              Prev
+            </button>
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i + 1)}
+                className={`btn btn-sm ${
+                  page === i + 1 ? "btn-primary" : "btn-outline"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              className="btn btn-sm"
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+            >
+              Next
+            </button>
           </div>
         )}
       </div>

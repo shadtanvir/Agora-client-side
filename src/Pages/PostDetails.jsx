@@ -145,13 +145,23 @@ const PostDetails = () => {
           text: commentText,
         }
       );
-      queryClient.setQueryData(["comments", id], (old = []) => [
-        res.data.comment,
-        ...old,
-      ]);
+
+      
+      queryClient.setQueryData(["comments", id], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page, idx) =>
+            idx === 0
+              ? { ...page, comments: [res.data.comment, ...page.comments] }
+              : page
+          ),
+        };
+      });
+      Swal.fire("Comment added!", "You commented on this post", "success");
       setCommentText("");
     } catch (err) {
-      console.error(err);
+      Swal.fire("Error", "Failed to add comment", "error");
     }
   };
 
