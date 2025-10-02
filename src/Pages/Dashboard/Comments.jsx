@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "../../components/Loading";
 
 const feedbackOptions = [
   "Spam or Irrelevant",
@@ -17,21 +18,25 @@ const Comments = () => {
   const { user } = use(AuthContext);
   const axiosSecure = UseAxiosSecure();
   const [selectedComment, setSelectedComment] = useState(null);
+  const [page, setPage] = useState(1);
+  const limit = 5;
 
   // Fetch comments with TanStack Query
-  const {
-    data: comments = [],
-    isLoading,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ["comments", postId],
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["comments", postId, page],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/comments/${postId}`);
-      return res.data || [];
+      const res = await axiosSecure.get(
+        `/comments/${postId}?page=${page}&limit=${limit}`
+      );
+      return res.data || { comments: [], total: 0 };
     },
     enabled: !!postId,
+    keepPreviousData: true,
   });
+
+  const comments = data?.comments || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / limit);
 
   const handleReport = async (commentId, feedback) => {
     try {
@@ -49,11 +54,7 @@ const Comments = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="max-w-5xl mx-auto my-10 text-center">
-        <p>Loading comments...</p>
-      </div>
-    );
+    return <Loading></Loading>;
   }
 
   if (isError) {
@@ -92,7 +93,7 @@ const Comments = () => {
 
               return (
                 <tr key={comment._id} className="bg-base-100">
-                  <td>{index + 1}</td>
+                  <td>{(page - 1) * limit + index + 1}</td>
                   <td className="font-medium">{comment.userEmail}</td>
                   <td>
                     {truncated}
@@ -144,6 +145,56 @@ const Comments = () => {
           <div className="text-center py-6 text-gray-500">No comments yet.</div>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-between items-center mt-4">
+          <p className="text-sm text-gray-600">
+            Showing {(page - 1) * limit + 1} - {Math.min(page * limit, total)}{" "}
+            of {total}
+          </p>
+          <div className="join">
+            <button
+              className="join-item btn btn-sm"
+              onClick={() => setPage((old) => Math.max(old - 1, 1))}
+              disabled={page === 1}
+            >
+              «
+            </button>
+            {[...Array(totalPages)].slice(0, 5).map((_, i) => (
+              <button
+                key={i}
+                className={`join-item btn btn-sm ${
+                  page === i + 1 ? "btn-active" : ""
+                }`}
+                onClick={() => setPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+            {totalPages > 5 && (
+              <span className="join-item btn btn-sm">...</span>
+            )}
+            {totalPages > 5 && (
+              <button
+                className={`join-item btn btn-sm ${
+                  page === totalPages ? "btn-active" : ""
+                }`}
+                onClick={() => setPage(totalPages)}
+              >
+                {totalPages}
+              </button>
+            )}
+            <button
+              className="join-item btn btn-sm"
+              onClick={() => setPage((old) => Math.min(old + 1, totalPages))}
+              disabled={page === totalPages}
+            >
+              »
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Read More Modal */}
       {selectedComment && (

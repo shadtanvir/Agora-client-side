@@ -15,7 +15,12 @@ import useTitle from "../hooks/UseTitle";
 import Loading from "../components/Loading";
 import Swal from "sweetalert2";
 import UseUser from "../hooks/UseUser";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 
 const PostDetails = () => {
   useTitle("Post Details");
@@ -41,18 +46,26 @@ const PostDetails = () => {
     },
   });
 
-  // fetch comments with react-query
+  // fetch comments with infinite query
   const {
-    data: comments = [],
+    data: commentsPages,
     isLoading: commentsLoading,
-    error: commentsError,
-  } = useQuery({
+    isError: commentsError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["comments", id],
-    queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/comments/${id}`);
+    queryFn: async ({ pageParam = 1 }) => {
+      const res = await axios.get(
+        `http://localhost:5000/comments/${id}?page=${pageParam}&limit=5`
+      );
       return res.data;
     },
+    getNextPageParam: (lastPage, pages) =>
+      lastPage.hasMore ? pages.length + 1 : undefined,
   });
+  const comments = commentsPages?.pages.flatMap((p) => p.comments) || [];
 
   //  Vote mutation with optimistic updates
   const voteMutation = useMutation({
@@ -253,6 +266,19 @@ const PostDetails = () => {
             <p className="text-gray-500 text-sm">No comments yet.</p>
           )}
         </div>
+
+        {/* Pagination controls */}
+        {hasNextPage && (
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+              className="px-4 py-2 bg-secondary text-white rounded"
+            >
+              {isFetchingNextPage ? "Loading..." : "Load More"}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
