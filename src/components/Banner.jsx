@@ -95,7 +95,7 @@ const Banner = () => {
   const { data: tags = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/tags");
+      const res = await axios.get("https://agora-shadtanvir-server.vercel.app/tags");
       return res.data;
     },
   });
@@ -110,10 +110,10 @@ const Banner = () => {
     queryFn: async () => {
       const endpoint =
         query && query.trim().length > 0
-          ? `http://localhost:5000/search/posts?q=${encodeURIComponent(
+          ? `https://agora-shadtanvir-server.vercel.app/search/posts?q=${encodeURIComponent(
               query
             )}&page=${page}&limit=${limit}`
-          : `http://localhost:5000/posts?page=${page}&limit=${limit}`;
+          : `https://agora-shadtanvir-server.vercel.app/posts?page=${page}&limit=${limit}`;
 
       const res = await axios.get(endpoint);
       return res.data;

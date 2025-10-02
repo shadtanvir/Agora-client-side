@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "./Loading";
 
 const fetchTags = async () => {
-  const res = await fetch("http://localhost:5000/tags"); // backend endpoint
+  const res = await fetch("https://agora-shadtanvir-server.vercel.app/tags"); // backend endpoint
   if (!res.ok) throw new Error("Failed to fetch tags");
   return res.json();
 };

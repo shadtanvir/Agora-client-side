@@ -133,7 +133,7 @@ const MyPosts = () => {
       {/* Confirm Delete Modal */}
       {selectedPost && (
         <dialog id="delete_modal" className="modal modal-open">
-          <div className="modal-box bg-base-200">
+          <div className="modal-box bg-base-300">
             <h3 className="font-bold text-lg text-error">Confirm Delete</h3>
             <p className="py-4">
               Are you sure you want to delete{" "}

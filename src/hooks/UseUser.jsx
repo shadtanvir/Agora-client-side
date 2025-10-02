@@ -18,7 +18,7 @@ const UseUser = () => {
       const res = await axiosSecure.get(`/get-user?email=${user.email}`);
       return res.data;
     },
-    enabled: !!user?.email, 
+    enabled: !!user?.email,
   });
 
   return { userDb: data, loading, error };

@@ -20,7 +20,7 @@ const MyProfile = () => {
   } = useQuery({
     queryKey: ["userProfile", user?.email],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/users/${user.email}`);
+      const res = await axios.get(`https://agora-shadtanvir-server.vercel.app/users/${user.email}`);
       return res.data;
     },
     enabled: !!user?.email,

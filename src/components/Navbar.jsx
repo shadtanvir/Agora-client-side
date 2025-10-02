@@ -57,21 +57,17 @@ const Navbar = () => {
     <>
       {/* Notification */}
       <li className="ml-4 mb-4 md:mb-0 flex items-center">
-        <Link
-          to="/announcements"
-          title="Announcements"
-          className="relative inline-flex items-center justify-center w-10 h-10 rounded-md hover:bg-gray-100 dark:hover:bg-gray-400"
-        >
+        
           {/* Notification Icon with Count */}
           <div className="relative">
             <Bell className="w-6 h-6 text-[var(--color-accent)]" />
             {announcementCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[var(--color-error)] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-0 bg-[var(--color-error)] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                 {announcementCount > 99 ? "99+" : announcementCount}
               </span>
             )}
           </div>
-        </Link>
+        
       </li>
 
       {/* Avatar / Login */}
