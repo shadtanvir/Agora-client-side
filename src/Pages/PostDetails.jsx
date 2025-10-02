@@ -136,7 +136,7 @@ const PostDetails = () => {
 
   if (!post) return <Loading />;
 
-  const hasVoted = post.votes?.find((v) => v.email === user.email);
+  const hasVoted = post.votes?.find((v) => v.email === user?.email);
   const userVoteType = hasVoted?.type;
 
   return (
@@ -200,10 +200,8 @@ const PostDetails = () => {
           </button>
 
           {/* Share buttons */}
-          <FacebookShareButton url={shareUrl} quote={post.title}>
-            <FacebookIcon size={28} round />
-          </FacebookShareButton>
-          <WhatsappShareButton url={shareUrl} title={post.title}>
+
+          <WhatsappShareButton url={shareUrl}>
             <WhatsappIcon size={28} round />
           </WhatsappShareButton>
         </div>
@@ -228,7 +226,7 @@ const PostDetails = () => {
             disabled={userDb?.banned}
             className="px-4 py-2 bg-primary text-base-100 rounded"
           >
-            Comment
+            {user ? "Comment" : "Login to comment"}
           </button>
         </div>
 

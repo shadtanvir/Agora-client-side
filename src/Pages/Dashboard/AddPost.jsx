@@ -4,12 +4,14 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import UseUser from "../../hooks/UseUser";
 import Swal from "sweetalert2";
+import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 
 const AddPost = () => {
   const { user } = useContext(AuthContext);
   const [postCount, setPostCount] = useState(0);
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();
+  const axiosSecure = UseAxiosSecure();
   const { userDb, loading, error } = UseUser();
   console.log(userDb);
 
@@ -39,8 +41,8 @@ const AddPost = () => {
       tag: form.tag.value,
     };
 
-    await axios.post("http://localhost:5000/posts", newPost);
-    alert("Post added successfully!");
+    await axiosSecure.post("http://localhost:5000/posts", newPost);
+    Swal.fire("Post Shared!", "Your post is shared to the forum", "success");
     form.reset();
     navigate("/dashboard/my-posts");
   };

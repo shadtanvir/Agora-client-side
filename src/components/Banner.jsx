@@ -110,9 +110,7 @@ const Banner = () => {
     queryFn: async () => {
       const endpoint =
         query && query.trim().length > 0
-          ? `http://localhost:5000/posts/search?q=${encodeURIComponent(
-              query
-            )}&page=${page}&limit=${limit}`
+          ? `http://localhost:5000/search/posts?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
           : `http://localhost:5000/posts?page=${page}&limit=${limit}`;
 
       const res = await axios.get(endpoint);
