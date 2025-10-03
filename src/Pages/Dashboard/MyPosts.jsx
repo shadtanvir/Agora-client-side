@@ -79,7 +79,7 @@ const MyPosts = () => {
             {posts.map((post, index) => (
               <tr
                 key={post._id}
-                className="bg-base-100 hover:bg-base-200 transition"
+                className="bg-base-100 hover:bg-base-300 transition"
               >
                 <td className="py-2 px-2 sm:px-4">
                   {(page - 1) * limit + index + 1}

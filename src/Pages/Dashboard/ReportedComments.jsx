@@ -79,7 +79,7 @@ const ReportedComments = () => {
               </thead>
               <tbody>
                 {comments.map((comment, idx) => (
-                  <tr key={comment._id} className="bg-base-100">
+                  <tr key={comment._id} className="bg-base-100 hover:bg-base-300">
                     <td>{(page - 1) * limit + idx + 1}</td>
                     <td>{comment.userName}</td>
                     <td>{comment.userEmail}</td>

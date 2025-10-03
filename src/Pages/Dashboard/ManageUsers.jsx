@@ -74,7 +74,7 @@ const ManageUsers = () => {
     return <p className="text-center text-red-500">Error fetching users</p>;
 
   return (
-    <div className="max-w-5xl mx-auto my-10 p-4 font-inter">
+    <div className="max-w-4xl mx-auto my-10  font-inter">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold text-primary font-poppins">
           Manage Users
@@ -82,41 +82,45 @@ const ManageUsers = () => {
       </div>
 
       {/* Search Form */}
-      <form onSubmit={handleSearch} className="mb-4 flex justify-center gap-2">
+      <form
+        onSubmit={handleSearch}
+        className="mb-4 flex flex-col md:flex-row justify-center gap-2"
+      >
         <input
           type="text"
           placeholder="Search by username..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          className="input input-bordered w-full max-w-md"
+          className="input input-bordered w-full "
         />
-        <button type="submit" className="btn btn-primary text-base-300">
+        <button
+          type="submit"
+          className="btn btn-primary text-center text-base-300"
+        >
           Search
         </button>
       </form>
 
       {/* Table */}
-      <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
+      <div className="overflow-x-auto  shadow-lg rounded-lg border border-green-200">
         <table className="table w-full text-sm">
           <thead className="bg-blue-300 font-poppins ">
             <tr className="text-primary font-semibold">
-              <th>#</th>
-              <th>User Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Badge</th>
-              <th>Actions</th>
+              <th className="py-3 px-4 text-left">#</th>
+              <th className="py-3 px-4 text-left">User Name</th>
+              <th className="py-3 px-4 text-left">Email</th>
+              <th className="py-3 px-4 text-left">Subscription</th>
+              <th className="py-3 px-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             {users.map((u, index) => (
-              <tr key={u._id} className="bg-base-100">
-                <td>{(page - 1) * limit + index + 1}</td>
-                <td className="font-medium">{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.role || "user"}</td>
-                <td>{u.badge || "bronze"}</td>
-                <td className="flex gap-2">
+              <tr key={u._id} className="bg-base-100 hover:bg-base-300">
+                <td className="py-2 px-4">{(page - 1) * limit + index + 1}</td>
+                <td className=" py-2 px-4 font-medium">{u.name}</td>
+                <td className="py-2 px-4 break-words">{u.email}</td>
+                <td className="py-2 px-4">{u.badge || "bronze"}</td>
+                <td className="py-2 px-4 flex flex-col md:flex-row gap-2">
                   {u.role !== "admin" && (
                     <button
                       onClick={() => handleMakeAdmin(u._id)}

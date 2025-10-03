@@ -18,6 +18,7 @@ import ReportedComments from "../Pages/Dashboard/ReportedComments";
 import AdminProfile from "../Pages/Dashboard/AdminProfile";
 import MembershipPage from "../Pages/MembershipPage";
 import ErrorPage from "../Pages/ErrorPage";
+import ManageCourses from "../Pages/ManageCourses";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -84,6 +85,7 @@ const mainRoutes = createBrowserRouter([
         path: "/dashboard/add-post",
         element: <AddPost></AddPost>,
       },
+
       {
         path: "/dashboard/manage-users",
         element: <ManageUsers></ManageUsers>,

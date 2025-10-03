@@ -244,7 +244,7 @@ const PostDetails = () => {
           <MessageCircle size={20} /> Comments
         </h3>
 
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-col md:flex-row gap-2 mb-4">
           <input
             type="text"
             value={commentText}

@@ -71,11 +71,11 @@ const Posts = () => {
                       {new Date(post.createdAt).toLocaleString()}
                     </p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm font-semibold text-green-600">
+                  <div className="text-right">ltw1
+                    <p className="text-sm font-semibold text-accent">
                       Votes: {post.voteDifference}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-accent font-semibold text-nowrap">
                       {post.commentsCount} comments
                     </p>
                   </div>

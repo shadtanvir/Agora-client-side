@@ -96,7 +96,7 @@ const MyProfile = () => {
         <div className="flex flex-col text-center sm:text-left">
           <h3 className="text-xl text-primary font-bold">{userData.name}</h3>
           <p className="text-secondary break-words">{userData.email}</p>{" "}
-          {/* 👈 wrap long emails */}
+          {/*  wrap long emails */}
           {/* Badge */}
           <div className="mt-3 flex justify-center sm:justify-start items-center gap-3">
             {userData.badge === "bronze" && (

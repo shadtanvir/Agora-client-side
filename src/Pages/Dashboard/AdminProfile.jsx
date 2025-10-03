@@ -58,7 +58,7 @@ const AdminProfile = () => {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto my-10 p-6 shadow-lg rounded-xl bg-base-300">
+    <div className="max-w-5xl mx-auto my-10 p-4 shadow-lg rounded-xl bg-base-300">
       {/* Admin Info */}
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6 text-center sm:text-left">
         <img
@@ -112,7 +112,7 @@ const AdminProfile = () => {
 
       {/* Add Tag Form */}
       <div className="mt-10">
-        <h3 className="text-base sm:text-lg font-bold mb-2 text-primary">
+        <h3 className=" text-xl font-bold mb-2 text-primary">
           Add New Tag
         </h3>
         <form
@@ -122,7 +122,7 @@ const AdminProfile = () => {
           <input
             type="text"
             placeholder="Tag Name"
-            className="input input-bordered  flex-1"
+            className="input input-bordered p-3 flex-1"
             value={tagName}
             onChange={(e) => setTagName(e.target.value)}
           />

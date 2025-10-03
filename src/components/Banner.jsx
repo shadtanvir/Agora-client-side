@@ -30,7 +30,7 @@ const bannerSlides = [
 const ResultCard = ({ post }) => {
   return (
     <Link key={post._id} to={`/posts/${post._id}`}>
-      <article className="bg-base-100 shadow-sm rounded-lg p-4 flex gap-4">
+      <article className="bg-base-100 shadow-sm rounded-lg p-4 flex  gap-4">
         <img
           src={post.authorImage || "/default-avatar.png"}
           alt={post.authorName || "Author avatar"}
@@ -54,12 +54,12 @@ const ResultCard = ({ post }) => {
                 Votes:
                 {(post.upVote || 0) - (post.downVote || 0)}
               </div>
-              <div className="text-xs text-secondary mt-1">
+              <div className="text-xs text-accent font-semibold mt-1 text-nowrap">
                 {post.commentsCount || 0} comments
               </div>
             </div>
-          </div>
-          <div className="flex flex-wrap gap-2 mt-3">
+          </div>mc
+mc          <div className="flex flex-wrap gap-2 mt-3">
             {post.tag && (
               <span className="px-2 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600">
                 {post.tag}
@@ -95,7 +95,9 @@ const Banner = () => {
   const { data: tags = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
-      const res = await axios.get("https://agora-shadtanvir-server.vercel.app/tags");
+      const res = await axios.get(
+        "https://agora-shadtanvir-server.vercel.app/tags"
+      );
       return res.data;
     },
   });
@@ -237,9 +239,7 @@ const Banner = () => {
 
         <div className="grid gap-4">
           {isLoading && <div className="text-center">Loading posts...</div>}
-          {isError && (
-            <div className="text-center ">Error loading posts</div>
-          )}
+          {isError && <div className="text-center ">Error loading posts</div>}
           {!isLoading && results.length === 0 && (
             <div className="text-center py-8 text-secondary">
               No posts found. Try another tag!

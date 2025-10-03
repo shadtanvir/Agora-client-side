@@ -70,7 +70,7 @@ const UserDashboard = () => {
       </aside>
 
       {/* Mobile Navbar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 bg-base-300 shadow-lg flex items-center gap-1 p-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 bg-base-300 shadow-lg flex items-center gap-1 p-4 z-10">
         {/* Hamburger */}
         <button
           className="btn btn-ghost text-primary"
