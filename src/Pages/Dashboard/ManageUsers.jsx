@@ -104,7 +104,7 @@ const ManageUsers = () => {
               <th>User Name</th>
               <th>Email</th>
               <th>Role</th>
-              <th>Subscription</th>
+              <th>Badge</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -115,7 +115,7 @@ const ManageUsers = () => {
                 <td className="font-medium">{u.name}</td>
                 <td>{u.email}</td>
                 <td>{u.role || "user"}</td>
-                <td>{u.membership || "Free"}</td>
+                <td>{u.badge || "bronze"}</td>
                 <td className="flex gap-2">
                   {u.role !== "admin" && (
                     <button

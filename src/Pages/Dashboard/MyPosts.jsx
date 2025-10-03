@@ -56,41 +56,52 @@ const MyPosts = () => {
   return (
     <div className="max-w-6xl mx-auto my-10 p-4 font-inter">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-primary font-poppins">
+        <h2 className="text-2xl sm:text-3xl font-bold text-primary font-poppins">
           My Posts
         </h2>
-        <p className="text-gray-500">Manage all your posts here.</p>
+        <p className="text-gray-500 text-sm sm:text-base">
+          Manage all your posts here.
+        </p>
       </div>
 
+      {/* Responsive Table */}
       <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
-        <table className="table w-full text-sm">
+        <table className="table w-full text-xs sm:text-sm">
           <thead className="bg-blue-300 font-poppins text-green-800">
-            <tr className="text-primary font-semibold">
-              <th>#</th>
-              <th>Title</th>
-              <th>Votes</th>
-              <th>Actions</th>
+            <tr className="text-primary font-semibold text-xs sm:text-sm">
+              <th className="p-2 sm:p-4">#</th>
+              <th className="p-2 sm:p-4">Title</th>
+              <th className="p-2 sm:p-4">Votes</th>
+              <th className="p-2 sm:p-4">Actions</th>
             </tr>
           </thead>
           <tbody>
             {posts.map((post, index) => (
-              <tr key={post._id} className="bg-base-100">
-                <td className="py-2 px-4">{(page - 1) * limit + index + 1}</td>
-                <td className="py-2 px-4 font-semibold text-primary">
+              <tr
+                key={post._id}
+                className="bg-base-100 hover:bg-base-200 transition"
+              >
+                <td className="py-2 px-2 sm:px-4">
+                  {(page - 1) * limit + index + 1}
+                </td>
+                <td className="py-2 px-2 sm:px-4 font-semibold text-primary break-words max-w-[150px] sm:max-w-none">
                   {post.title}
                 </td>
-                <td className="py-2 px-4">{post.upVote - post.downVote}</td>
-                <td className="flex gap-2 py-2 px-4">
+                <td className="py-2 px-2 sm:px-4">
+                  {post.upVote - post.downVote}
+                </td>
+                <td className="flex flex-col sm:flex-row gap-2 py-2 px-2 sm:px-4">
                   <Link
                     to={`/dashboard/comments/${post._id}?email=${user.email}`}
+                    className="flex-1 sm:flex-initial"
                   >
-                    <button className="btn btn-sm btn-info flex items-center gap-1">
+                    <button className="btn btn-xs sm:btn-sm btn-info w-full sm:w-auto flex items-center gap-1">
                       <FaCommentDots /> Comment
                     </button>
                   </Link>
                   <button
                     onClick={() => setSelectedPost(post)}
-                    className="btn btn-sm btn-error flex items-center gap-1"
+                    className="btn btn-xs sm:btn-sm btn-error w-full sm:w-auto flex items-center gap-1"
                   >
                     <FaTrashAlt /> Delete
                   </button>
@@ -101,63 +112,33 @@ const MyPosts = () => {
         </table>
 
         {!loading && posts.length === 0 && (
-          <div className="text-center py-6 text-gray-500">
+          <div className="text-center py-6 text-gray-500 text-sm sm:text-base">
             You haven’t posted anything yet.
           </div>
         )}
       </div>
 
-      {/* Pagination Footer */}
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2 py-4">
+        <div className="flex justify-center gap-2 py-4 text-sm sm:text-base">
           <button
-            className="btn btn-sm"
+            className="btn btn-xs sm:btn-sm"
             onClick={() => setPage((p) => Math.max(p - 1, 1))}
             disabled={page === 1}
           >
             Prev
           </button>
-          <span className="px-3 py-1">
+          <span className="px-2 sm:px-3 py-1">
             Page {page} of {totalPages}
           </span>
           <button
-            className="btn btn-sm"
+            className="btn btn-xs sm:btn-sm"
             onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
             disabled={page === totalPages}
           >
             Next
           </button>
         </div>
-      )}
-
-      {/* Confirm Delete Modal */}
-      {selectedPost && (
-        <dialog id="delete_modal" className="modal modal-open">
-          <div className="modal-box bg-base-300">
-            <h3 className="font-bold text-lg text-error">Confirm Delete</h3>
-            <p className="py-4">
-              Are you sure you want to delete{" "}
-              <span className="font-semibold text-primary">
-                {selectedPost.title}
-              </span>{" "}
-              ? This action cannot be undone.
-            </p>
-            <div className="modal-action">
-              <button
-                onClick={confirmDelete}
-                className="btn btn-error text-white"
-              >
-                Yes, Delete
-              </button>
-              <button
-                onClick={() => setSelectedPost(null)}
-                className="btn btn-ghost"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </dialog>
       )}
     </div>
   );

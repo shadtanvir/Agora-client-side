@@ -10,14 +10,14 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-40">
         {/* Column 1: Logo & Slogan */}
         <div>
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center">
+          <div className="">
+            <Link to="/" className="flex items-center gap-1">
               <img
                 src={logo}
                 alt="Agora logo"
-                className="w-12 h-12 object-contain"
+                className="w-15 h-15 object-contain"
               />
-              <span className="text-accent text-2xl md:text-3xl font-bold ml-3">
+              <span className="text-blue-600 text-3xl md:text-3xl font-bold ">
                 Agora
               </span>
             </Link>

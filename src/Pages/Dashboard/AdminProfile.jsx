@@ -60,35 +60,44 @@ const AdminProfile = () => {
   return (
     <div className="max-w-5xl mx-auto my-10 p-6 shadow-lg rounded-xl bg-base-300">
       {/* Admin Info */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6 text-center sm:text-left">
         <img
           src={user?.photoURL}
           alt="Admin"
           className="w-20 h-20 rounded-full shadow-md"
         />
         <div>
-          <h2 className="text-2xl font-bold text-primary">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary">
             {user?.displayName}
           </h2>
-          <p className="text-secondary">{user?.email}</p>
+          <p className="text-secondary text-sm sm:text-base">{user?.email}</p>
         </div>
       </div>
 
       {/* Stats + Chart */}
-
-      <div className="space-y-2 font-medium mt-5">
-        <p className="text-[#2196F3]">Comments: {stats.comments}</p>
-        <p className="text-[#4CAF50]">Posts: {stats.posts}</p>
-        <p className="text-[#FF9800]">Users: {stats.users}</p>
+      <div className="space-y-2 font-medium mt-5 text-center sm:text-left">
+        <p className="text-[#2196F3] text-sm sm:text-base lg:text-lg">
+          Comments: {stats.comments}
+        </p>
+        <p className="text-[#4CAF50] text-sm sm:text-base lg:text-lg">
+          Posts: {stats.posts}
+        </p>
+        <p className="text-[#FF9800] text-sm sm:text-base lg:text-lg">
+          Users: {stats.users}
+        </p>
       </div>
 
-      <div className="flex justify-center">
-        <PieChart width={500} height={400}>
+      <div className="flex justify-center overflow-x-auto mt-6">
+        <PieChart
+          width={300}
+          height={250}
+          className="sm:w-[400px] sm:h-[300px] lg:w-[500px] lg:h-[400px]"
+        >
           <Pie
             data={pieData}
             cx="50%"
             cy="50%"
-            outerRadius={100}
+            outerRadius={80}
             dataKey="value"
             label
           >
@@ -103,12 +112,17 @@ const AdminProfile = () => {
 
       {/* Add Tag Form */}
       <div className="mt-10">
-        <h3 className="text-lg font-bold mb-2 text-primary">Add New Tag</h3>
-        <form onSubmit={handleAddTag} className="flex gap-2">
+        <h3 className="text-base sm:text-lg font-bold mb-2 text-primary">
+          Add New Tag
+        </h3>
+        <form
+          onSubmit={handleAddTag}
+          className="flex flex-col sm:flex-row gap-2"
+        >
           <input
             type="text"
             placeholder="Tag Name"
-            className="input input-bordered flex-1"
+            className="input input-bordered  flex-1"
             value={tagName}
             onChange={(e) => setTagName(e.target.value)}
           />
@@ -122,7 +136,7 @@ const AdminProfile = () => {
           {tags.map((tag) => (
             <span
               key={tag._id}
-              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+              className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm"
             >
               {tag.name}
             </span>

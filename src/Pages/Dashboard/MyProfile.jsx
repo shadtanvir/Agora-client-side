@@ -20,7 +20,9 @@ const MyProfile = () => {
   } = useQuery({
     queryKey: ["userProfile", user?.email],
     queryFn: async () => {
-      const res = await axios.get(`https://agora-shadtanvir-server.vercel.app/users/${user.email}`);
+      const res = await axios.get(
+        `https://agora-shadtanvir-server.vercel.app/users/${user.email}`
+      );
       return res.data;
     },
     enabled: !!user?.email,
@@ -54,22 +56,49 @@ const MyProfile = () => {
   }
 
   return (
-    <div>
-      <h2 className="text-3xl text-primary font-semibold mb-6">My Profile</h2>
+    <div className="mt-10">
+      <h2 className="text-2xl text-primary font-semibold mb-6">My Profile</h2>
 
       {/* User Info */}
-      <div className="flex items-center gap-6 bg-base-300 p-6 rounded-lg shadow">
+      {/* <div className="flex sm:flex-row items-center gap-6 bg-base-300 p-6 rounded-lg shadow">
         <img
           src={userData.photoURL || "/default-avatar.png"}
           alt="User avatar"
           className="w-24 h-24 rounded-full object-cover border-2 border-primary"
         />
-        <div>
+        <div className="flex flex-col">
           <h3 className="text-xl text-primary font-bold">{userData.name}</h3>
-          <p className="text-secondary">{userData.email}</p>
+          <p className="text-secondary ">{userData.email}</p>
 
-          {/* Badge */}
+          
           <div className="mt-3 flex items-center gap-3">
+            {userData.badge === "bronze" && (
+              <span className="inline-flex items-center py-1 rounded-full text-sm font-medium">
+                <img src={bronze_badge} alt="Bronze" className="w-15 h-15" />
+              </span>
+            )}
+            {userData.badge === "gold" && (
+              <span className="inline-flex items-center py-1">
+                <img src={gold_badge} alt="Gold" className="w-12 h-17" />
+              </span>
+            )}
+          </div>
+        </div>
+      </div> */}
+
+      <div className="flex flex-col sm:flex-row items-center gap-6 bg-base-300 p-6 rounded-lg shadow">
+        <img
+          src={userData.photoURL || "/default-avatar.png"}
+          alt="User avatar"
+          className="w-24 h-24 rounded-full object-cover border-2 border-primary"
+        />
+
+        <div className="flex flex-col text-center sm:text-left">
+          <h3 className="text-xl text-primary font-bold">{userData.name}</h3>
+          <p className="text-secondary break-words">{userData.email}</p>{" "}
+          {/* 👈 wrap long emails */}
+          {/* Badge */}
+          <div className="mt-3 flex justify-center sm:justify-start items-center gap-3">
             {userData.badge === "bronze" && (
               <span className="inline-flex items-center py-1 rounded-full text-sm font-medium">
                 <img src={bronze_badge} alt="Bronze" className="w-15 h-15" />
@@ -86,7 +115,7 @@ const MyProfile = () => {
 
       {/* Recent Posts */}
       <div className="mt-8">
-        <h3 className="text-3xl text-primary font-semibold mb-4">
+        <h3 className="text-2xl text-primary font-semibold mb-4">
           My Recent Posts
         </h3>
         {recentPosts.length === 0 ? (
