@@ -36,7 +36,7 @@ const ErrorPage = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="btn btn-primary text-white text-lg rounded-lg font-poppins font-semibold px-6 py-2 shadow-lg hover:shadow-2xl transition"
+            className=" bg-blue-600 text-white text-lg rounded-lg font-poppins font-semibold px-6 py-2 shadow-lg hover:shadow-2xl transition"
           >
             Back to Home
           </motion.button>

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import Loading from "./Loading";
 
 const fetchTags = async () => {
-  const res = await fetch("https://agora-shadtanvir-server.vercel.app/tags"); // backend endpoint
+  const res = await fetch("http://localhost:5000/tags"); // backend endpoint
   if (!res.ok) throw new Error("Failed to fetch tags");
   return res.json();
 };
@@ -22,8 +22,8 @@ const TagsSection = ({ onTagSelect }) => {
   });
 
   return (
-    <div className="w-full py-6 bg-base-100 shadow-sm rounded-xl">
-      <h2 className="text-xl md:text-2xl text-primary font-semibold mb-4 text-center">
+    <div className="w-6xl mx-auto px-6 pt-15 bg-base-100 ">
+      <h2 className="text-2xl md:text-2xl text-primary font-semibold mb-8">
         Tags
       </h2>
 
@@ -31,7 +31,7 @@ const TagsSection = ({ onTagSelect }) => {
       {isError && <p className="text-center text-error">Failed to load tags</p>}
 
       {!isLoading && !isError && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 ">
           {tags.map((t, index) => (
             <motion.button
               key={index}

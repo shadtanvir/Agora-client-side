@@ -11,7 +11,6 @@ const MyProfile = () => {
   useTitle("Profile");
   const { user } = useContext(AuthContext);
 
-  // Use TanStack Query to fetch user + recentPosts
   const {
     data: profileData,
     isLoading,
@@ -20,9 +19,7 @@ const MyProfile = () => {
   } = useQuery({
     queryKey: ["userProfile", user?.email],
     queryFn: async () => {
-      const res = await axios.get(
-        `https://agora-shadtanvir-server.vercel.app/users/${user.email}`
-      );
+      const res = await axios.get(`http://localhost:5000/users/${user.email}`);
       return res.data;
     },
     enabled: !!user?.email,
@@ -30,9 +27,7 @@ const MyProfile = () => {
     retry: 1,
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
   if (isError) {
     return (
@@ -43,7 +38,6 @@ const MyProfile = () => {
     );
   }
 
-  // Keep same variable names as before for minimal change
   const profile = profileData || {};
   const { user: userData = null, recentPosts = [] } = profile;
 
@@ -59,57 +53,63 @@ const MyProfile = () => {
     <div className="mt-10">
       <h2 className="text-2xl text-primary font-semibold mb-6">My Profile</h2>
 
-      {/* User Info */}
-      {/* <div className="flex sm:flex-row items-center gap-6 bg-base-300 p-6 rounded-lg shadow">
-        <img
-          src={userData.photoURL || "/default-avatar.png"}
-          alt="User avatar"
-          className="w-24 h-24 rounded-full object-cover border-2 border-primary"
-        />
-        <div className="flex flex-col">
-          <h3 className="text-xl text-primary font-bold">{userData.name}</h3>
-          <p className="text-secondary ">{userData.email}</p>
-
-          
-          <div className="mt-3 flex items-center gap-3">
-            {userData.badge === "bronze" && (
-              <span className="inline-flex items-center py-1 rounded-full text-sm font-medium">
-                <img src={bronze_badge} alt="Bronze" className="w-15 h-15" />
-              </span>
-            )}
-            {userData.badge === "gold" && (
-              <span className="inline-flex items-center py-1">
-                <img src={gold_badge} alt="Gold" className="w-12 h-17" />
-              </span>
-            )}
-          </div>
+      {/* User Profile Card */}
+      <div className="rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 p-6 sm:p-8 flex flex-col sm:flex-row gap-6">
+        {/* Avatar + Badge */}
+        <div className="relative flex-shrink-0">
+          <img
+            src={userData.photoURL || "/default-avatar.png"}
+            alt="User avatar"
+            className="w-28 h-28 rounded-full object-cover border-2 border-primary transition-transform transform hover:scale-105"
+          />
+          {/* Badge Overlay */}
+          {userData.badge && (
+            <div className="absolute -bottom-2 -right-2">
+              <img
+                src={userData.badge === "gold" ? gold_badge : bronze_badge}
+                alt={`${userData.badge} badge`}
+                className="w-12 h-12 animate-bounce"
+              />
+            </div>
+          )}
         </div>
-      </div> */}
 
-      <div className="flex flex-col sm:flex-row items-center gap-6 bg-base-300 p-6 rounded-lg shadow">
-        <img
-          src={userData.photoURL || "/default-avatar.png"}
-          alt="User avatar"
-          className="w-24 h-24 rounded-full object-cover border-2 border-primary"
-        />
+        {/* User Info */}
+        <div className="flex-1 flex flex-col justify-center gap-4">
+          <h2 className="text-2xl font-bold text-primary">{userData.name}</h2>
+          <p className="text-gray-500 break-words">{userData.email}</p>
 
-        <div className="flex flex-col text-center sm:text-left">
-          <h3 className="text-xl text-primary font-bold">{userData.name}</h3>
-          <p className="text-secondary break-words">{userData.email}</p>{" "}
-          {/*  wrap long emails */}
-          {/* Badge */}
-          <div className="mt-3 flex justify-center sm:justify-start items-center gap-3">
-            {userData.badge === "bronze" && (
-              <span className="inline-flex items-center py-1 rounded-full text-sm font-medium">
-                <img src={bronze_badge} alt="Bronze" className="w-15 h-15" />
-              </span>
-            )}
-            {userData.badge === "gold" && (
-              <span className="inline-flex items-center py-1">
-                <img src={gold_badge} alt="Gold" className="w-12 h-17" />
-              </span>
-            )}
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 text-sm text-gray-500">
+            <div>
+              <span className="font-semibold text-primary">Phone:</span>{" "}
+              {userData.phone || "Not provided"}
+            </div>
+            <div>
+              <span className="font-semibold text-primary">Address:</span>{" "}
+              {userData.address || "Unknown"}
+            </div>
+            <div>
+              <span className="font-semibold text-primary">Profession:</span>{" "}
+              {userData.profession || "Community Member"}
+            </div>
+            <div>
+              <span className="font-semibold text-primary">Bio:</span>{" "}
+              {userData.bio || "Excited to be part of Agora!"}
+            </div>
           </div>
+
+          {/* Optional: Progress / Rank Bar */}
+          {userData.badge && (
+            <div className="mt-4 w-full bg-gray-300 h-2 rounded-full overflow-hidden">
+              <div
+                className={`h-2 rounded-full ${
+                  userData.badge === "gold" ? "bg-yellow-400" : "bg-orange-400"
+                }`}
+                style={{ width: userData.badge === "gold" ? "100%" : "60%" }}
+              ></div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -130,8 +130,8 @@ const MyProfile = () => {
                 <h4 className="font-semibold text-primary text-lg">
                   {post.title}
                 </h4>
-                <p className=" text-sm line-clamp-2">{post.description}</p>
-                <div className="mt-2 text-xs text-secondary  flex justify-between">
+                <p className="text-sm line-clamp-2">{post.description}</p>
+                <div className="mt-2 text-xs text-secondary flex justify-between">
                   <span>Tag: {post.tag}</span>
                   <span>
                     {post.createdAt

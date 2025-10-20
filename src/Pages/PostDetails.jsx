@@ -41,7 +41,7 @@ const PostDetails = () => {
   } = useQuery({
     queryKey: ["post", id],
     queryFn: async () => {
-      const res = await axios.get(`https://agora-shadtanvir-server.vercel.app/posts/${id}`);
+      const res = await axios.get(`http://localhost:5000/posts/${id}`);
       return res.data;
     },
   });
@@ -58,7 +58,7 @@ const PostDetails = () => {
     queryKey: ["comments", id],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await axios.get(
-        `https://agora-shadtanvir-server.vercel.app/comments/${id}?page=${pageParam}&limit=5`
+        `http://localhost:5000/comments/${id}?page=${pageParam}&limit=5`
       );
       return res.data;
     },

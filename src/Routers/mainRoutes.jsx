@@ -18,7 +18,9 @@ import ReportedComments from "../Pages/Dashboard/ReportedComments";
 import AdminProfile from "../Pages/Dashboard/AdminProfile";
 import MembershipPage from "../Pages/MembershipPage";
 import ErrorPage from "../Pages/ErrorPage";
-import ManageCourses from "../Pages/ManageCourses";
+import About from "../Pages/About";
+import CommunityPage from "../Pages/CommunityPage";
+import UserOverview from "../Pages/Dashboard/UserOverview";
 
 const mainRoutes = createBrowserRouter([
   {
@@ -31,16 +33,24 @@ const mainRoutes = createBrowserRouter([
         element: <Home></Home>,
       },
       {
-        path: "/membership",
+        path: "/community",
         element: (
           <PrivateRoute>
-            <MembershipPage></MembershipPage>
+            <CommunityPage></CommunityPage>
           </PrivateRoute>
         ),
       },
       {
+        path: "/membership",
+        element: <MembershipPage></MembershipPage>,
+      },
+      {
         path: "/posts/:id",
         element: <PostDetails></PostDetails>,
+      },
+      {
+        path: "/about",
+        element: <About></About>,
       },
     ],
   },
@@ -76,6 +86,10 @@ const mainRoutes = createBrowserRouter([
       {
         path: "/dashboard/comments/:postId",
         element: <Comments></Comments>,
+      },
+      {
+        path: "/dashboard/overview",
+        element: <UserOverview></UserOverview>,
       },
       {
         path: "/dashboard/my-posts",

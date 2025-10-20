@@ -24,9 +24,9 @@ const Posts = () => {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8">
+    <div className="w-6xl mx-auto px-6 pt-15">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-8">
         <h2 className="text-2xl font-semibold text-primary">Posts</h2>
         <button
           onClick={() => {
@@ -34,7 +34,7 @@ const Posts = () => {
             setPage(1);
             refetch();
           }}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+          className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition"
         >
           {sortBy === "newest" ? "Sort by Popularity" : "Sort by Newest"}
         </button>
@@ -71,7 +71,8 @@ const Posts = () => {
                       {new Date(post.createdAt).toLocaleString()}
                     </p>
                   </div>
-                  <div className="text-right">ltw1
+                  <div className="text-right">
+                    
                     <p className="text-sm font-semibold text-accent">
                       Votes: {post.voteDifference}
                     </p>
@@ -99,7 +100,7 @@ const Posts = () => {
       {data && (
         <div className="flex justify-center items-center gap-3 mt-6">
           <button
-            className="px-3 py-1 border  btn rounded disabled:opacity-50"
+            className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
             disabled={page <= 1}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
@@ -109,7 +110,7 @@ const Posts = () => {
             Page {data.currentPage} of {data.totalPages}
           </span>
           <button
-            className="px-3 py-1 border btn rounded disabled:opacity-50"
+            className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
             disabled={page >= data.totalPages}
             onClick={() => setPage((p) => Math.min(data.totalPages, p + 1))}
           >

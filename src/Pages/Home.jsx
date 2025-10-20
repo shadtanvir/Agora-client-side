@@ -4,6 +4,9 @@ import useTitle from "../hooks/UseTitle";
 import TagsSection from "../components/TagsSection";
 import AnnouncementsSection from "../components/AnnouncementsSection";
 import Posts from "../components/Posts";
+import Testimonials from "../components/Testimonials";
+import FeaturedMembers from "../components/FeaturedMembers";
+import CommunityImpact from "../components/CommunityImpact";
 
 const Home = () => {
   useTitle("Home");
@@ -13,6 +16,9 @@ const Home = () => {
       <TagsSection></TagsSection>
       <AnnouncementsSection></AnnouncementsSection>
       <Posts></Posts>
+      <FeaturedMembers></FeaturedMembers>
+      <CommunityImpact></CommunityImpact>
+      <Testimonials></Testimonials>
     </div>
   );
 };

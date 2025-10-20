@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://agora-shadtanvir-server.vercel.app",
+    baseURL: "http://localhost:5000",
 });
 
 export default api;

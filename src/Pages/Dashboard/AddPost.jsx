@@ -26,7 +26,7 @@ const AddPost = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axios.get(
-        `https://agora-shadtanvir-server.vercel.app/posts/count/${user.email}`
+        `http://localhost:5000/posts/count/${user.email}`
       );
       // endpoint returns { count }
       return res.data.count ?? 0;
@@ -42,7 +42,7 @@ const AddPost = () => {
   } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
-      const res = await axios.get("https://agora-shadtanvir-server.vercel.app/tags");
+      const res = await axios.get("http://localhost:5000/tags");
       return res.data || [];
     },
     staleTime: 1000 * 60 * 5,
@@ -103,11 +103,7 @@ const AddPost = () => {
   }
 
   if (postCountError || tagsError) {
-    return (
-      <div className="max-w-3xl mx-auto mt-10 text-center text-red-600">
-        <p>Failed to load required data. Refresh the page.</p>
-      </div>
-    );
+    return <Loading></Loading>;
   }
 
   // Restrict free users with bronze badge to 5 posts
@@ -129,7 +125,7 @@ const AddPost = () => {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-10">
+    <div className=" mt-10">
       <h2 className="text-3xl text-primary font-bold mb-6">Add New Post</h2>
       <form
         onSubmit={handleSubmit}

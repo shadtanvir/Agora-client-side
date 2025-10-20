@@ -5,6 +5,12 @@ import { Typewriter } from "react-simple-typewriter";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { MdKeyboardArrowLeft,MdOutlineKeyboardArrowRight } from "react-icons/md";
+
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const bannerSlides = [
   {
@@ -27,10 +33,29 @@ const bannerSlides = [
   },
 ];
 
+//  Custom arrow components
+const CustomPrevArrow = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="absolute top-1/2  z-20 text-white "
+  >
+    <MdKeyboardArrowLeft size={42}  />
+  </button>
+);
+
+const CustomNextArrow = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="absolute right-0 top-1/2  z-20  text-white "
+  >
+    <MdOutlineKeyboardArrowRight size={42} />
+  </button>
+);
+
 const ResultCard = ({ post }) => {
   return (
     <Link key={post._id} to={`/posts/${post._id}`}>
-      <article className="bg-base-100 shadow-sm rounded-lg p-4 flex  gap-4">
+      <article className="bg-base-100 shadow-sm rounded-lg p-4 flex gap-4">
         <img
           src={post.authorImage || "/default-avatar.png"}
           alt={post.authorName || "Author avatar"}
@@ -51,15 +76,15 @@ const ResultCard = ({ post }) => {
             </div>
             <div className="text-right">
               <div className="text-sm font-semibold text-accent">
-                Votes:
-                {(post.upVote || 0) - (post.downVote || 0)}
+                Votes: {(post.upVote || 0) - (post.downVote || 0)}
               </div>
               <div className="text-xs text-accent font-semibold mt-1 text-nowrap">
                 {post.commentsCount || 0} comments
               </div>
             </div>
-          </div>mc
-mc          <div className="flex flex-wrap gap-2 mt-3">
+          </div>
+
+          <div className="flex flex-wrap gap-2 mt-3">
             {post.tag && (
               <span className="px-2 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600">
                 {post.tag}
@@ -76,6 +101,10 @@ mc          <div className="flex flex-wrap gap-2 mt-3">
 };
 
 const Banner = () => {
+  const [query, setQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 5;
+
   const settings = {
     dots: true,
     infinite: true,
@@ -84,25 +113,23 @@ const Banner = () => {
     autoplaySpeed: 5000,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: false,
+    arrows: true,
+    nextArrow: <CustomNextArrow />,
+    prevArrow: <CustomPrevArrow />,
   };
 
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const limit = 5;
-
-  // 🔹 Fetch tags with TanStack
+  // Fetch tags
   const { data: tags = [] } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
       const res = await axios.get(
-        "https://agora-shadtanvir-server.vercel.app/tags"
+        "http://localhost:5000/tags"
       );
       return res.data;
     },
   });
 
-  // Fetch posts with TanStack (search + pagination)
+  // Fetch posts
   const {
     data: postsData,
     isLoading,
@@ -112,11 +139,10 @@ const Banner = () => {
     queryFn: async () => {
       const endpoint =
         query && query.trim().length > 0
-          ? `https://agora-shadtanvir-server.vercel.app/search/posts?q=${encodeURIComponent(
+          ? `http://localhost:5000/search/posts?q=${encodeURIComponent(
               query
             )}&page=${page}&limit=${limit}`
-          : `https://agora-shadtanvir-server.vercel.app/posts?page=${page}&limit=${limit}`;
-
+          : `http://localhost:5000/posts?page=${page}&limit=${limit}`;
       const res = await axios.get(endpoint);
       return res.data;
     },
@@ -132,10 +158,11 @@ const Banner = () => {
   };
 
   return (
-    <div className="w-full overflow-hidden font-poppins">
+    <div className="w-full overflow-hidden font-poppins relative">
+      {/*  Slider */}
       <Slider {...settings}>
         {bannerSlides.map((slide, index) => (
-          <div key={index} className="relative h-[520px] md:h-[640px]">
+          <div key={index} className="relative h-[410px] md:h-[410px]">
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: `url(${slide.image})` }}
@@ -225,12 +252,12 @@ const Banner = () => {
       </Slider>
 
       {/* Results area */}
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="w-6xl mx-auto px-6 pt-15">
+        <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-primary">
             {query ? `Results for "${query}"` : "Latest posts"}
           </h2>
-          <div className="text-sm text-secondary">
+          <div className="text-sm text-primary">
             {isLoading
               ? "Loading..."
               : `${results.length} result${results.length !== 1 ? "s" : ""}`}
@@ -239,7 +266,7 @@ const Banner = () => {
 
         <div className="grid gap-4">
           {isLoading && <div className="text-center">Loading posts...</div>}
-          {isError && <div className="text-center ">Error loading posts</div>}
+          {isError && <div className="text-center">Error loading posts</div>}
           {!isLoading && results.length === 0 && (
             <div className="text-center py-8 text-secondary">
               No posts found. Try another tag!
@@ -252,7 +279,7 @@ const Banner = () => {
         {/* Pagination */}
         <div className="mt-6 flex items-center justify-center gap-3">
           <button
-            className="btn "
+            className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
             onClick={() => setPage((s) => Math.max(1, s - 1))}
             disabled={page <= 1}
           >
@@ -262,7 +289,7 @@ const Banner = () => {
             Page {page} of {totalPages}
           </div>
           <button
-            className="btn "
+            className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
             onClick={() => setPage((s) => Math.min(totalPages, s + 1))}
             disabled={page >= totalPages}
           >

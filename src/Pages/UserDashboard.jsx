@@ -31,8 +31,20 @@ const UserDashboard = () => {
         My Profile
       </NavLink>
       <NavLink
+        to="/dashboard/overview"
+        onClick={() => setIsOpen(false)}
+        className={({ isActive }) =>
+          isActive
+            ? "rounded-none font-bold text-primary"
+            : "hover:font-bold text-primary"
+        }
+      >
+        Overview
+      </NavLink>
+      
+      <NavLink
         to="/dashboard/add-post"
-        onClick={() => setIsOpen(false)} 
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           isActive
             ? "rounded-none font-bold text-primary"
@@ -43,7 +55,7 @@ const UserDashboard = () => {
       </NavLink>
       <NavLink
         to="/dashboard/my-posts"
-        onClick={() => setIsOpen(false)} 
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           isActive
             ? "rounded-none font-bold text-primary"
@@ -63,8 +75,8 @@ const UserDashboard = () => {
           <img src={logo} alt="Logo" className="w-17 h-17 object-contain" />
           <span className="text-blue-600 text-3xl -ml-4 font-bold">Agora</span>
         </Link>
-        <h2 className="text-xl text-primary font-bold mb-6">
-          {user?.displayName}'s Dashboard
+        <h2 className="text-2xl text-primary font-bold mb-6">
+          {user?.displayName.split(" ")[0]}'s Dashboard
         </h2>
         <nav className="flex text-lg flex-col gap-3">{navLinks}</nav>
       </aside>
@@ -109,8 +121,6 @@ const UserDashboard = () => {
         <div className="fixed inset-0 z-40 flex">
           {/* Sidebar itself */}
           <div className="w-64 h-screen bg-base-300 shadow-lg flex flex-col p-3 animate-slide-in">
-            
-
             <Link
               to="/"
               className="flex items-center gap-2 mb-6"

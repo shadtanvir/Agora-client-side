@@ -1,28 +1,21 @@
 import { FaFacebookF, FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import { Link } from "react-router";
 import logo from "../assets/logo.png";
+import { useEffect } from "react";
 const Footer = () => {
   return (
-    <footer
-      className="bg-base-100 text-primary font-inter px-6 md:px-10 py-10"
-      /* bg-base-100 uses your --color-base-100 variable (theme aware) */
-    >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-40">
+    <footer className="bg-base-300 text-primary font-inter mt-15 py-10">
+      <div className="w-6xl mx-auto flex flex-col md:flex-row justify-between gap-10 ">
         {/* Column 1: Logo & Slogan */}
-        <div>
-          <div className="">
-            <Link to="/" className="flex items-center gap-1">
-              <img
-                src={logo}
-                alt="Agora logo"
-                className="w-15 h-15 object-contain"
-              />
-              <span className="text-blue-600 text-3xl md:text-3xl font-bold ">
-                Agora
-              </span>
+        <div className="pl-2">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center">
+              <img src={logo} alt="Logo" className="w-20 h-20 object-contain" />
+              <span className="text-blue-600 text-3xl font-bold">Agora</span>
             </Link>
           </div>
-          <p className="mt-3 text-sm text-secondary max-w-sm">
+
+          <p className=" pl-6 max-w-xs text-secondary ">
             Agora — a place for open, constructive discussion. Post, vote, and
             discover ideas across tags and topics. Built for community-driven
             conversation.
@@ -30,8 +23,8 @@ const Footer = () => {
         </div>
 
         {/* Column 2: Quick Links */}
-        <div>
-          <h3 className="text-lg font-poppins font-semibold mb-3 text-primary">
+        <div className="pl-8 md:pr-3 md:pl-0">
+          <h3 className="text-xl font-poppins font-semibold mb-3 text-primary md:pt-6">
             Quick Links
           </h3>
           <ul className="space-y-2 text-sm text-secondary">
@@ -47,16 +40,16 @@ const Footer = () => {
             </li>
 
             <li>
-              <Link to="/dashboard" className="hover:text-accent transition">
-                Dashboard
+              <Link to="/about" className="hover:text-accent transition">
+                About
               </Link>
             </li>
           </ul>
         </div>
 
         {/* Column 3: Resources */}
-        <div>
-          <h3 className="text-lg font-poppins text-primary font-semibold mb-3 ">
+        <div className="md:pr-6 pl-8  md:pl-0">
+          <h3 className="text-xl md:pt-6 font-poppins text-primary font-semibold mb-3 ">
             Contact Us
           </h3>
           <div className="flex space-x-3 mt-4">
