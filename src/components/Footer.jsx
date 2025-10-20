@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const Footer = () => {
   return (
     <footer className="bg-base-300 text-primary font-inter mt-15 py-10">
-      <div className="w-6xl mx-auto flex flex-col md:flex-row justify-between gap-10 ">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-10 ">
         {/* Column 1: Logo & Slogan */}
         <div className="pl-2">
           <div className="flex items-center">
@@ -91,9 +91,9 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div
-        className="mt-10 text-center text-sm text-secondary pt-4"
+        className="mt-10 text-center text-sm text-primary pt-4"
         style={{
-          borderTop: "1px solid var(--color-base-200)", // uses your bronze color for subtle divider
+          borderTop: "1px solid",
         }}
       >
         © {new Date().getFullYear()}{" "}

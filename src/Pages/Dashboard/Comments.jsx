@@ -76,8 +76,8 @@ const Comments = () => {
     );
 
   return (
-    <div className="max-w-5xl mx-auto my-10 p-4 font-inter">
-      <div className="text-center mb-8">
+    <div className="max-w-6xl mx-auto my-10 p-4 font-inter">
+      <div className=" mb-8">
         <h2 className="text-2xl font-bold text-primary font-poppins">
           Comments on Post
         </h2>

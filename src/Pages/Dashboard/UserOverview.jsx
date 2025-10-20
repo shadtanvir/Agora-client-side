@@ -15,7 +15,7 @@ import {
 } from "recharts";
 import { AuthContext } from "../../Provider/AuthProvider";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const COLORS = ["#4CAF50", "#2196F3", "#FF9800"];
 

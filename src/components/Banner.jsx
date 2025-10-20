@@ -252,7 +252,7 @@ const Banner = () => {
       </Slider>
 
       {/* Results area */}
-      <div className="w-6xl mx-auto px-6 pt-15">
+      <div className="max-w-6xl mx-auto px-6 pt-10">
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-primary">
             {query ? `Results for "${query}"` : "Latest posts"}

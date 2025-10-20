@@ -6,7 +6,7 @@ import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { toast } from "react-toastify";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const MyPosts = () => {
   useTitle("My Posts");
@@ -55,8 +55,8 @@ const MyPosts = () => {
 
   return (
     <div className="max-w-6xl mx-auto my-10 p-4 font-inter">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-primary font-poppins">
+      <div className="mb-8">
+        <h2 className="text-2xl  font-bold text-primary font-poppins">
           My Posts
         </h2>
         <p className="text-gray-500 text-sm sm:text-base">

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import pageNotFound from "../assets/Error 404.json";
-import useTitle from "../hooks/UseTitle";
+import useTitle from "../hooks/useTitle";
 
 const ErrorPage = () => {
   useTitle("404 - Page Not Found");

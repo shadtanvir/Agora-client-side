@@ -5,7 +5,7 @@ import { FaUsers, FaMedal, FaChartLine, FaHandshake } from "react-icons/fa";
 const About = () => {
   return (
     <section
-      className="w-5xl py-15 px-6 mx-auto font-poppins"
+      className="max-w-6xl py-10 px-6 mx-auto font-poppins"
       style={{
         backgroundColor: "var(--color-base-100)",
         color: "var(--color-primary)",

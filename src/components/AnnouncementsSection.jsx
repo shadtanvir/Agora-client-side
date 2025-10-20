@@ -21,7 +21,7 @@ export default function AnnouncementsSection() {
   if (announcements.length === 0) return;
 
   return (
-    <div className="w-6xl mx-auto my-8 px-6 pt-13 bg-base-100 ">
+    <div className="max-w-6xl mx-auto my-8 px-6 pt-13 bg-base-100 ">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-[var(--color-primary)]">
           

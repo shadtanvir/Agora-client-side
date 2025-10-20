@@ -86,13 +86,13 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <section className=" pt-15 font-poppins">
+    <section className=" pt-10 font-poppins">
 
       <motion.div
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="w-6xl mx-auto px-6 "
+        className="max-w-6xl mx-auto px-6 "
       >
         <h2 className="text-2xl  font-semibold text-primary mb-8">
           Voices of the Community

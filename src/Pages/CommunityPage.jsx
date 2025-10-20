@@ -51,7 +51,7 @@ const CommunityPage = () => {
   const { trendingTags, topContributors, recentPosts } = communityData;
 
   return (
-    <div className="min-h-screen  py-15 w-6xl mx-auto font-poppins">
+    <div className="min-h-screen  py-10 max-w-6xl mx-auto font-poppins">
       {/* Welcome Section */}
       <motion.div
         initial={{ opacity: 0, y: -40 }}

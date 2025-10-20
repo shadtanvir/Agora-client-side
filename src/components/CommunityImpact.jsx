@@ -49,7 +49,7 @@ const CommunityImpact = () => {
   ];
 
   return (
-    <section className="pt-15 w-6xl mx-auto px-6 ">
+    <section className="pt-10 max-w-6xl mx-auto px-6 ">
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ const CommunityImpact = () => {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-max-w-6xl mx-auto">
         {stats.map((stat, idx) => (
           <motion.div
             key={idx}

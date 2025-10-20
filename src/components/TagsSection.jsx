@@ -22,7 +22,7 @@ const TagsSection = ({ onTagSelect }) => {
   });
 
   return (
-    <div className="w-6xl mx-auto px-6 pt-15 bg-base-100 ">
+    <div className="max-w-6xl mx-auto px-6 pt-10 bg-base-100 ">
       <h2 className="text-2xl md:text-2xl text-primary font-semibold mb-8">
         Tags
       </h2>

@@ -5,11 +5,12 @@ import { AuthContext } from "../Provider/AuthProvider";
 import Swal from "sweetalert2";
 import { IoMdEyeOff } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
-import useTitle from "../hooks/UseTitle";
+import useTitle from "../hooks/useTitle";
 import loginLottie from "../assets/Login.json";
 import registerLottie from "../assets/Register.json";
 import Lottie from "lottie-react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 const JoinUs = () => {
   const {
@@ -125,9 +126,26 @@ const JoinUs = () => {
   };
 
   return (
-    <div className=" min-h-screen font-poppins flex justify-center items-center">
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl py-5">
-        <h2 className="font-semibold text-2xl text-primary text-center font-poppins">
+    <div className="max-w-6xl mx-auto px-6 py-10 font-poppins flex flex-col md:flex-row items-center justify-center gap-8">
+      {/* Lottie Animation */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        className="w-full md:w-1/2 flex justify-center mb-6 md:mb-0"
+      >
+        <div className="w-3/4 md:w-full">
+          {isLogin ? (
+            <Lottie animationData={loginLottie} loop={true} />
+          ) : (
+            <Lottie animationData={registerLottie} loop={true} />
+          )}
+        </div>
+      </motion.div>
+
+      {/* Form Section */}
+      <div className="card bg-base-100 w-full md:w-1/2 max-w-sm shadow-2xl py-6">
+        <h2 className="font-semibold text-2xl text-primary text-center font-poppins mb-4">
           {isLogin ? "Login to your account" : "Register your account"}
         </h2>
 
@@ -145,7 +163,7 @@ const JoinUs = () => {
                   placeholder="Your Name"
                 />
                 {errors.name && (
-                  <span className="text-red-500">Name is required</span>
+                  <span className="text-red-500 text-sm">Name is required</span>
                 )}
 
                 <label className="label">Photo URL</label>
@@ -155,7 +173,9 @@ const JoinUs = () => {
                   placeholder="Photo URL"
                 />
                 {errors.photoUrl && (
-                  <span className="text-red-500">Photo URL is required</span>
+                  <span className="text-red-500 text-sm">
+                    Photo URL is required
+                  </span>
                 )}
               </>
             )}
@@ -168,7 +188,7 @@ const JoinUs = () => {
               placeholder="Email"
             />
             {errors.email && (
-              <span className="text-red-500">Email is required</span>
+              <span className="text-red-500 text-sm">Email is required</span>
             )}
 
             <label className="label">Password</label>
@@ -182,17 +202,17 @@ const JoinUs = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-5 flex items-center text-gray-600"
+                className="absolute inset-y-0 right-4 flex items-center text-gray-500"
               >
                 {showPassword ? (
-                  <IoEyeOutline size={21} />
+                  <IoEyeOutline size={20} />
                 ) : (
-                  <IoMdEyeOff size={21} />
+                  <IoMdEyeOff size={20} />
                 )}
               </button>
             </div>
             {errors.password && (
-              <span className="text-red-500">Password is required</span>
+              <span className="text-red-500 text-sm">Password is required</span>
             )}
 
             {!isLogin && (
@@ -209,17 +229,17 @@ const JoinUs = () => {
 
             <button
               type="submit"
-              className="btn border-primary bg-blue-600 text-white font-poppins mt-4"
+              className="btn bg-blue-600 text-white font-poppins mt-4 hover:bg-blue-700 transition"
             >
               {isLogin ? "Login" : "Register"}
             </button>
 
-            <p className="font-semibold text-center pt-5">
+            <p className="font-semibold text-center pt-5 text-sm">
               {isLogin ? "Don't have an account?" : "Already have an account?"}{" "}
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-blue-600"
+                className="text-blue-600 hover:underline"
               >
                 {isLogin ? "Register" : "Login"}
               </button>
@@ -227,21 +247,21 @@ const JoinUs = () => {
 
             <div className="divider">OR</div>
 
-            {/* Social logins */}
-            {/* Google */}
+            {/* Google Login */}
             <button
               onClick={handleGoogleLogin}
-              className="btn bg-white text-black border-[#e5e5e5]"
+              type="button"
+              className="btn bg-white text-black border-gray-300 hover:bg-gray-100"
             >
               <svg
                 aria-label="Google logo"
-                width="16"
-                height="16"
+                width="18"
+                height="18"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 512 512"
               >
                 <g>
-                  <path d="m0 0H512V512H0" fill="#fff"></path>
+                  <path fill="#fff" d="M0 0H512V512H0z"></path>
                   <path
                     fill="#34a853"
                     d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"
@@ -260,8 +280,7 @@ const JoinUs = () => {
                   ></path>
                 </g>
               </svg>
-              {isLogin ? "Login " : "Sign Up "}
-              with Google
+              {isLogin ? "Login" : "Sign Up"} with Google
             </button>
           </fieldset>
         </form>

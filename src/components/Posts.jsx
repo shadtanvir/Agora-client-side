@@ -24,7 +24,7 @@ const Posts = () => {
   });
 
   return (
-    <div className="w-6xl mx-auto px-6 pt-15">
+    <div className="max-w-6xl mx-auto px-6 pt-10">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-8">
         <h2 className="text-2xl font-semibold text-primary">Posts</h2>

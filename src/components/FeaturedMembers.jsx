@@ -18,8 +18,8 @@ const FeaturedMembers = () => {
   if (isLoading) return <Loading></Loading>;
 
   return (
-    <section className=" pt-15 b">
-      <div className="relative w-6xl mx-auto px-6 ">
+    <section className=" pt-10 b">
+      <div className="relative max-w-6xl mx-auto px-6 ">
         <motion.h2
           className="text-2xl  font-semibold mb-8 text-primary"
           initial={{ opacity: 0, y: -30 }}

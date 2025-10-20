@@ -237,7 +237,7 @@ const Navbar = () => {
 
   return (
     <div className="navbar sticky z-50 top-0 shadow-md px-4 py-2 bg-base-100 text-primary-content font-poppins h-20">
-      <div className="navbar w-6xl mx-auto">
+      <div className="navbar max-w-6xl mx-auto">
         {/* Mobile dropdown */}
         <div className="navbar-start">
           <div className="dropdown lg:hidden">

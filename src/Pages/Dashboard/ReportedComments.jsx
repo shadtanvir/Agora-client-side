@@ -56,7 +56,7 @@ const ReportedComments = () => {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="max-w-6xl mx-auto my-10 p-4">
+    <div className="max-max-w-6xl mx-auto my-10 p-4">
       <h2 className="text-3xl font-bold text-center text-primary mb-6">
         Reported Comments
       </h2>
