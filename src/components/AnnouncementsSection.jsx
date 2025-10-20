@@ -5,7 +5,7 @@ import Loading from "./Loading";
 import { GrAnnounce } from "react-icons/gr";
 
 const fetchAnnouncements = async () => {
-  const { data } = await axios.get("http://localhost:5000/announcements");
+  const { data } = await axios.get("https://agora-shadtanvir-server.vercel.app/announcements");
   return data;
 };
 

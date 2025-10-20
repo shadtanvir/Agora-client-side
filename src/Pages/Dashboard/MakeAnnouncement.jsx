@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { use } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const MakeAnnouncement = () => {
   useTitle("Make Announcement");
@@ -49,33 +49,35 @@ const MakeAnnouncement = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto my-10 p-6 shadow-md rounded-lg bg-base-300">
-      <h2 className="text-xl font-bold mb-4 text-primary">Make Announcement</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder="Title"
-          className="input input-bordered w-full"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-          required
-        />
-        <textarea
-          placeholder="Description"
-          className="textarea textarea-bordered w-full"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          required
-        ></textarea>
-        <button
-          type="submit"
-          className="btn btn-primary text-base-300 w-full"
-          disabled={mutation.isLoading}
-        >
-          {mutation.isLoading ? "Posting..." : "Post Announcement"}
-        </button>
-      </form>
-    </div>
+    <>
+      <h2 className="text-2xl mt-10 font-bold mb-8 text-primary">Make Announcement</h2>
+      <div className="max-w-6xl  mb-10 p-6 shadow-md rounded-lg ">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Title"
+            className="input input-bordered w-full"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
+          />
+          <textarea
+            placeholder="Description"
+            className="textarea textarea-bordered w-full"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            required
+          ></textarea>
+          <button
+            type="submit"
+            className="btn btn-primary text-base-300 w-full"
+            disabled={mutation.isLoading}
+          >
+            {mutation.isLoading ? "Posting..." : "Post Announcement"}
+          </button>
+        </form>
+      </div>
+    </>
   );
 };
 

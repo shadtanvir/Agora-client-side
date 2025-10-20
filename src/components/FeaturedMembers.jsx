@@ -10,7 +10,7 @@ const FeaturedMembers = () => {
   const { data: members = [], isLoading } = useQuery({
     queryKey: ["featuredMembers"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/featured-members");
+      const res = await axios.get("https://agora-shadtanvir-server.vercel.app/featured-members");
       return res.data;
     },
   });

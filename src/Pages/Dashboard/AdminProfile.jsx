@@ -4,7 +4,10 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
+import { VscCommentDiscussion } from "react-icons/vsc";
+import { BiRepost } from "react-icons/bi";
+import { FaUsers } from "react-icons/fa";
 
 const COLORS = ["#4CAF50", "#2196F3", "#FF9800"];
 const AdminProfile = () => {
@@ -58,7 +61,7 @@ const AdminProfile = () => {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto my-10 p-4 shadow-lg rounded-xl bg-base-300">
+    <div className="max-w-6xl mx-auto my-10 p-8 shadow-lg rounded-xl">
       {/* Admin Info */}
       <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 mb-6 text-center sm:text-left">
         <img
@@ -75,16 +78,32 @@ const AdminProfile = () => {
       </div>
 
       {/* Stats + Chart */}
-      <div className="space-y-2 font-medium mt-5 text-center sm:text-left">
-        <p className="text-[#2196F3] text-sm sm:text-base lg:text-lg">
-          Comments: {stats.comments}
-        </p>
-        <p className="text-[#4CAF50] text-sm sm:text-base lg:text-lg">
-          Posts: {stats.posts}
-        </p>
-        <p className="text-[#FF9800] text-sm sm:text-base lg:text-lg">
-          Users: {stats.users}
-        </p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="p-4 bg-base-100 rounded-xl shadow hover:shadow-lg transition">
+          <h2 className="text-xl font-semibold text-[#2196F3] flex justify-center items-center gap-2 ">
+            <VscCommentDiscussion className="text-[#2196F3]" /> Comments
+          </h2>{" "}
+          <h3 className="text-2xl text-center font-bold text-[#2196F3]">
+            {stats.comments}
+          </h3>
+        </div>
+        <div className="p-4 bg-base-100 rounded-xl shadow hover:shadow-lg transition">
+          <h2 className="text-xl font-semibold text-[#4CAF50] flex justify-center items-center gap-2 ">
+            <BiRepost className="" /> Posts
+          </h2>{" "}
+          <h3 className="text-2xl text-center font-bold text-[#4CAF50]">
+            {stats.posts}
+          </h3>
+        </div>
+
+        <div className="p-4 bg-base-100 rounded-xl shadow hover:shadow-lg transition">
+          <h2 className="text-xl font-semibold text-[#ff9800] flex justify-center items-center gap-2 ">
+            <FaUsers /> Users
+          </h2>{" "}
+          <h3 className="text-2xl text-center font-bold text-[#ff9800]">
+            {stats.users}
+          </h3>
+        </div>
       </div>
 
       <div className="flex justify-center overflow-x-auto mt-6">
@@ -112,9 +131,7 @@ const AdminProfile = () => {
 
       {/* Add Tag Form */}
       <div className="mt-10">
-        <h3 className=" text-xl font-bold mb-2 text-primary">
-          Add New Tag
-        </h3>
+        <h3 className=" text-xl font-bold mb-2 text-primary">Add New Tag</h3>
         <form
           onSubmit={handleAddTag}
           className="flex flex-col sm:flex-row gap-2"

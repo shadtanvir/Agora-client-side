@@ -4,7 +4,7 @@ import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Loading from "../../components/Loading";
 import Swal from "sweetalert2";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const ManageUsers = () => {
   useTitle("Manage Users");
@@ -74,8 +74,8 @@ const ManageUsers = () => {
     return <p className="text-center text-red-500">Error fetching users</p>;
 
   return (
-    <div className="max-w-4xl mx-auto my-10  font-inter">
-      <div className="text-center mb-8">
+    <div className="max-w-6xl  my-10  font-inter">
+      <div className=" mb-8">
         <h2 className="text-2xl font-bold text-primary font-poppins">
           Manage Users
         </h2>
@@ -163,7 +163,7 @@ const ManageUsers = () => {
       {totalPages > 1 && (
         <div className="flex justify-center mt-4 gap-2">
           <button
-            className="btn btn-sm"
+            className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
             disabled={page === 1}
             onClick={() => setPage((p) => p - 1)}
           >
@@ -173,7 +173,7 @@ const ManageUsers = () => {
             Page {page} of {totalPages}
           </span>
           <button
-            className="btn btn-sm"
+            className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
             disabled={page === totalPages}
             onClick={() => setPage((p) => p + 1)}
           >

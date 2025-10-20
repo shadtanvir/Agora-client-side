@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import Loading from "../../components/Loading";
 import { useState } from "react";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const ReportedComments = () => {
   useTitle("Reported Comments");
@@ -56,8 +56,8 @@ const ReportedComments = () => {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="max-max-w-6xl mx-auto my-10 p-4">
-      <h2 className="text-3xl font-bold text-center text-primary mb-6">
+    <div className="max-w-6xl mx-auto my-10 p-4">
+      <h2 className="text-3xl font-bold text-primary mb-8">
         Reported Comments
       </h2>
       {comments.length === 0 ? (
@@ -124,21 +124,21 @@ const ReportedComments = () => {
           {totalPages > 1 && (
             <div className="flex justify-center mt-4 space-x-2">
               <button
-                className="btn btn-sm"
+                className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
                 onClick={() => setPage((p) => Math.max(p - 1, 1))}
                 disabled={page === 1}
               >
-                « Prev
+                Prev
               </button>
               <span className="px-3 py-1">
                 Page {page} of {totalPages}
               </span>
               <button
-                className="btn btn-sm"
+                className="px-4 py-2 bg-primary text-base-100 rounded-lg shadow hover:bg-indigo-700 transition disabled:opacity-20"
                 onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                 disabled={page === totalPages}
               >
-                Next »
+                Next
               </button>
             </div>
           )}

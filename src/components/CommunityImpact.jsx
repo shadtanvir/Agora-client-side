@@ -14,7 +14,7 @@ const CommunityImpact = () => {
   const { data: impact = {}, isLoading } = useQuery({
     queryKey: ["communityImpact"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/community-impact");
+      const res = await axios.get("https://agora-shadtanvir-server.vercel.app/community-impact");
       return res.data;
     },
   });
@@ -63,7 +63,7 @@ const CommunityImpact = () => {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
         {stats.map((stat, idx) => (
           <motion.div
             key={idx}

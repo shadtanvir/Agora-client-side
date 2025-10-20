@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { getIdToken } from "firebase/auth";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://agora-shadtanvir-server.vercel.app",
 });
 
 const UseAxiosSecure = () => {

@@ -75,7 +75,7 @@ const Navbar = () => {
         {!user && (
           <NavLink
             to="/auth"
-            className="btn btn-sm btn-outline font-poppins text-lg text-primary"
+            className="btn btn-sm  btn-outline font-poppins text-lg text-primary hover:bg-primary hover:text-base-100"
           >
             Join Us
           </NavLink>
@@ -244,7 +244,7 @@ const Navbar = () => {
             <div
               tabIndex={0}
               role="button"
-              className="btn btn-ghost lg:hidden text-primary"
+              className="p-2 hover:font-semibold hover:bg-base-300 lg:hidden text-primary"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

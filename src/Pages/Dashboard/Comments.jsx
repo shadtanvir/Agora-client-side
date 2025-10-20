@@ -6,7 +6,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { use } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const feedbackOptions = [
   "Spam or Irrelevant",

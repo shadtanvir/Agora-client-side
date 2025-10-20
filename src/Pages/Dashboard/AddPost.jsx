@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import UseAxiosSecure from "../../hooks/UseAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/Loading";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const AddPost = () => {
   useTitle("Add Post");
@@ -26,7 +26,7 @@ const AddPost = () => {
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:5000/posts/count/${user.email}`
+        `https://agora-shadtanvir-server.vercel.app/posts/count/${user.email}`
       );
       // endpoint returns { count }
       return res.data.count ?? 0;
@@ -42,7 +42,7 @@ const AddPost = () => {
   } = useQuery({
     queryKey: ["tags"],
     queryFn: async () => {
-      const res = await axios.get("http://localhost:5000/tags");
+      const res = await axios.get("https://agora-shadtanvir-server.vercel.app/tags");
       return res.data || [];
     },
     staleTime: 1000 * 60 * 5,

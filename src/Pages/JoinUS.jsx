@@ -76,7 +76,7 @@ const JoinUs = () => {
               role: "user",
             });
 
-            axios.post("http://localhost:5000/register", {
+            axios.post("https://agora-shadtanvir-server.vercel.app/register", {
               email: data.email,
               name: data.name,
               photoURL: user.photoURL,
@@ -104,7 +104,7 @@ const JoinUs = () => {
   const handleGoogleLogin = () => {
     googleSignIn()
       .then((res) => {
-        axios.post("http://localhost:5000/register", {
+        axios.post("https://agora-shadtanvir-server.vercel.app/register", {
           email: res.user.email,
           name: res.user.displayName,
           photoURL: res.user.photoURL,

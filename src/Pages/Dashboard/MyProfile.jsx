@@ -5,7 +5,7 @@ import bronze_badge from "../../assets/bronze_badge.png";
 import gold_badge from "../../assets/gold_badge.png";
 import Loading from "../../components/Loading";
 import { useQuery } from "@tanstack/react-query";
-import useTitle from "../../hooks/UseTitle";
+import useTitle from "../../hooks/useTitle";
 
 const MyProfile = () => {
   useTitle("Profile");
@@ -19,7 +19,7 @@ const MyProfile = () => {
   } = useQuery({
     queryKey: ["userProfile", user?.email],
     queryFn: async () => {
-      const res = await axios.get(`http://localhost:5000/users/${user.email}`);
+      const res = await axios.get(`https://agora-shadtanvir-server.vercel.app/users/${user.email}`);
       return res.data;
     },
     enabled: !!user?.email,
